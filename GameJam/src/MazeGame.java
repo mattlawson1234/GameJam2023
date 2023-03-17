@@ -24,13 +24,13 @@ public class MazeGame {
 		for (int count=0; count<10; count++) {
 			for (int count2=0; count2<10; count2++) {
 				if (Board[count][count2]==1) {
-					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Brick",0.1,0.1);
+					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Brick.png",0.1,0.1);
 				}
 				if (Board[count][count2]==0) {
-					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Path",0.1,0.1);
+					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Path.png",0.1,0.1);
 				}
 				if (Board[count][count2]==2) {
-					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Mario",0.1,0.1);
+					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Mario.png",0.1,0.1);
 				}
 			}
 		}
