@@ -30,7 +30,7 @@ public class MazeGame {
 					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Path.png",0.1,0.1);
 				}
 				if (Board[count][count2]==2) {
-					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "mario.jpg",0.1,0.1);
+					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Mario.png",0.1,0.1);
 				}
 			}
 		}
