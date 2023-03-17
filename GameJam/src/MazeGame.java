@@ -11,6 +11,7 @@ public class MazeGame {
 			StdDraw.enableDoubleBuffering();
 			int [][]MazeMain2=MovingMario(MazeMain);
 			printBoard(MazeMain2);
+			lightSource(MazeMain2);
 				if (StdDraw.isKeyPressed(81)) {
 					done++;
 
@@ -32,8 +33,33 @@ public class MazeGame {
 				if (Board[count][count2]==2) {
 					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Mario.png",0.1,0.1);
 				}
+				//if (Board[count][count2]==3) {
+				//	StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Entrance.png",0.1,0.1);
+				//}
+				//if (Board[count][count2==4]) {
+				//	StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Exit.png",0.1,0.1);
+				//}
 			}
 		}
+	}
+	public static void lightSource(int [][]Board) {
+		int x=0;
+		int y=0;
+		for (int count=0; count<10; count++) {
+			for (int count2=0; count2<10; count2++) {
+				if (Board[count][count2]==2) {
+					x=count;
+					y=count2;
+				}	
+			}
+		}
+		StdDraw.setPenRadius(0.055);
+		double radius=0.4;
+		while(radius<2) {
+			StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);
+			radius=radius+0.05;
+		}
+		
 	}
 	public static int [][] Matrix () {//initial maze matrix
 		int Maze[][]= {
