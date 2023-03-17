@@ -5,13 +5,16 @@ import java.util.Scanner;
 
 public class MazeGame {
 	public static void main (String[]arg) {
-		int done=0;
+		int done=0;			
+		long startTime = System.currentTimeMillis();
+		System.out.println(startTime);
 		int [][]MazeMain=Matrix();
 		while (done==0) {
 			StdDraw.enableDoubleBuffering();
 			int [][]MazeMain2=MovingMario(MazeMain);
 			printBoard(MazeMain2);
-			lightSource(MazeMain2);
+
+			lightSource(MazeMain2,startTime);
 				if (StdDraw.isKeyPressed(81)) {
 					done++;
 
@@ -42,7 +45,7 @@ public class MazeGame {
 			}
 		}
 	}
-	public static void lightSource(int [][]Board) {
+	public static void lightSource(int [][]Board, long startTime) {
 		int x=0;
 		int y=0;
 		for (int count=0; count<10; count++) {
@@ -54,7 +57,7 @@ public class MazeGame {
 			}
 		}
 		StdDraw.setPenRadius(0.055);
-		double radius=0.4;
+		double radius=0.4-(System.currentTimeMillis()-startTime)*100;
 		while(radius<2) {
 			StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);
 			radius=radius+0.05;
