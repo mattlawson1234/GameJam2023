@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class MazeGame {
 	public static void main (String[]arg) {
 		int done=0;
-		StdDraw.line(0,0,1,1);
 		int [][]MazeMain=Matrix();
 		while (done==0) {
 			StdDraw.enableDoubleBuffering();
