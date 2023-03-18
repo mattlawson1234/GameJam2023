@@ -111,7 +111,7 @@ public class MazeGame {
 		// Loop to generate maze path
 		do{
 
-			
+			// Something
 
 		}while(!validMaze);
 		
