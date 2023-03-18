@@ -22,6 +22,7 @@ public class MazeGame {
 			StdDraw.clear();
 		}
 	}
+	
 	public static void printBoard (int [][]Board) {//Prints the current board
 		for (int count=0; count<10; count++) {
 			for (int count2=0; count2<10; count2++) {
@@ -43,6 +44,7 @@ public class MazeGame {
 			}
 		}
 	}
+
 	public static void lightSource(int [][]Board, long startTime) {
 		int x=0;
 		int y=0;
@@ -64,6 +66,63 @@ public class MazeGame {
 		}
 		
 	}
+
+	// Method to randomly generate maze
+	public static int[][] generateMaze(int[] playerPosition){
+
+		// Declare array to store maze
+		int[][] maze = new int[20][20];
+
+		// Randomly generate start tile in the middle of the maze
+		maze[(9 + (int)(Math.random() * 2))][(9 + (int)(Math.random() * 2))] = 2;
+
+		// Generate walls along borders of the maze
+		for(int i = 0; i < 20; i++){
+
+			// Generate walls along top of the maze
+			maze[0][i] = 1;
+
+			// Generate walls along bottom of the maze
+			maze[19][i] = 1;
+
+			// Generate walls along left side of the maze
+			maze[i][0] = 1;
+
+			// Generate walls along right side of the maze
+			maze[i][19] = 1;
+
+		}
+
+		// Randomly generate whether exit tile is along row or column (0 = row, 1 = column)
+		if((int)(Math.random() * 2) == 0){
+
+			// Randomly generate exit tile along top or bottom row
+			maze[(int)(Math.random() * 2) * 19][(int)(Math.random() * 20)] = 4;
+
+		}
+		else{
+
+			// Randomly generate exit tile along leftmost or rightmost column
+			maze[(int)(Math.random() * 20)][(int)(Math.random() * 2) * 19] = 4;
+
+		}
+
+		// Declare boolean variable to run loop that generates the maze path
+		boolean validMaze = false;
+
+		// Loop to generate maze path
+		do{
+
+			// Something
+
+		}while(!validMaze);
+		
+
+		// Return the generated maze
+		return maze;
+
+	}
+
 	public static int [][] Matrix () {//initial maze matrix
 		int Maze[][]= {
 			{1,1,1,1,1,1,1,1,1,1},
@@ -79,6 +138,7 @@ public class MazeGame {
 		};
 		return Maze;
 	}
+
 	public static int[][] MovingMario(int [][]Board) {
 			int x=0;
 			int y=0;
