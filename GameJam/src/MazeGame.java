@@ -189,3 +189,7 @@ public class MazeGame {
 	}
 
 }
+
+
+
+//this is a test comment, to see if Github properly works on my end.
