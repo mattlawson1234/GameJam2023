@@ -46,6 +46,7 @@ public class MazeGame {
 	}
 
 	public static void lightSource(int [][]Board, long startTime) {
+		//Finds location of player
 		int x=0;
 		int y=0;
 		for (int count=0; count<10; count++) {
@@ -56,13 +57,13 @@ public class MazeGame {
 				}	
 			}
 		}
-		StdDraw.setPenRadius(0.055);
-		double timeDif=(System.currentTimeMillis()-startTime)/50000;
-		double radius=0.4-timeDif;
-		System.out.println(radius);
-		while(radius<2) {
-			StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);
-			radius=radius+0.05;
+		StdDraw.setPenRadius(0.055);//Sets radius of drawn circles
+		double timeDif=(System.currentTimeMillis()-startTime)/50000;//Takes time difference between when started running and current time, divide by 50000 to make a small enough number
+		double radius=0.4-timeDif;//Subtracts 0.4 from above to get radius value
+		while(radius<2) {//Starts while loop, will go until the radius value is 2
+			StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);//Prints circle with radius value of 'radius'
+			radius=radius+0.05;//Adds more to radius
+			//Basically is printing a whole bunch of circles around player
 		}
 		
 	}
