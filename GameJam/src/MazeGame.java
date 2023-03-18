@@ -55,7 +55,7 @@ public class MazeGame {
 			}
 		}
 		StdDraw.setPenRadius(0.055);
-		double radius=0.4-(System.currentTimeMillis()-startTime)*1000000;
+		double radius=0.4-(System.currentTimeMillis()-startTime)*100;
 		while(radius<2) {
 			StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);
 			radius=radius+0.05;
