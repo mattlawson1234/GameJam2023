@@ -9,14 +9,14 @@ public class MazeGame {
 		int done=0;
 		int count=0;
 		int [][]MazeMain=Matrix();
-		while (done==0) {
+		while (done==0&&count<226) {
 			StdDraw.enableDoubleBuffering();
 			int [][]MazeMain2=MovingMario(MazeMain);
 			printBoard(MazeMain2);
 			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
-				if (StdDraw.isKeyPressed(81)) {
-					done++;
-				}
+			if (StdDraw.isKeyPressed(81)) {	
+				done++;
+			}
 			count++;
 			StdDraw.show();
 			StdDraw.pause(50);
@@ -24,6 +24,7 @@ public class MazeGame {
 		}
 	}
 	
+	//Prints the board for the player
 	public static void printBoard (int [][]Board) {//Prints the current board
 		for (int count=0; count<10; count++) {
 			for (int count2=0; count2<10; count2++) {
@@ -45,7 +46,7 @@ public class MazeGame {
 			}
 		}
 	}
-
+	//Method for printing a slowly closing circle around the player
 	public static void lightSource(int [][]Board, double startCount) {
 		//Finds location of player
 		int x=0;
@@ -148,6 +149,7 @@ public class MazeGame {
 		return Maze;
 	}
 
+	//Method for controlling the player with the four arrow keys
 	public static int[][] MovingMario(int [][]Board) {
 			int x=0;
 			int y=0;
