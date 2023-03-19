@@ -228,7 +228,11 @@ public class MazeGame {
 
 	}
 
+<<<<<<< Updated upstream
 
 }
 
 // I hate it here
+=======
+}
+>>>>>>> Stashed changes
