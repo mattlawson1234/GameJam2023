@@ -103,17 +103,21 @@ public class MazeGame {
 
 		}
 
+		// Declare variables to store coordinates of randomly generated end tile
+		int firstCoord = (int)(Math.random() * 2) * 19;
+		int secondCoord = (int)(Math.random() * 20);
+
 		// Randomly generate whether exit tile is along row or column (0 = row, 1 = column)
 		if((int)(Math.random() * 2) == 0){
 
 			// Randomly generate exit tile along top or bottom row
-			maze[(int)(Math.random() * 2) * 19][(int)(Math.random() * 20)] = 4;
+			maze[firstCoord][secondCoord] = 4;
 
 		}
 		else{
 
 			// Randomly generate exit tile along leftmost or rightmost column
-			maze[(int)(Math.random() * 20)][(int)(Math.random() * 2) * 19] = 4;
+			maze[secondCoord][firstCoord] = 4;
 
 		}
 
@@ -123,7 +127,7 @@ public class MazeGame {
 		// Loop to generate maze path
 		do{
 
-			// Something
+			
 
 		}while(!validMaze);
 		
@@ -199,7 +203,3 @@ public class MazeGame {
 	}
 
 }
-
-
-
-//this is a test comment, to see if Github properly works on my end.
