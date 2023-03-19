@@ -9,17 +9,17 @@ public class MazeGame {
 		int count=0;
 		int [][]MazeMain=Matrix();
 		while (done==0) {
-			//StdDraw.enableDoubleBuffering();
-			//int [][]MazeMain2=MovingMario(MazeMain);
-			//printBoard(MazeMain2);
-			//lightSource(MazeMain2,count);
-			//	if (StdDraw.isKeyPressed(81)) {
-			//		done++;
-			//	}
-			//count++;
-			//StdDraw.show();
-			//StdDraw.pause(50);
-			//StdDraw.clear();
+			StdDraw.enableDoubleBuffering();
+			int [][]MazeMain2=MovingMario(MazeMain);
+			printBoard(MazeMain2);
+			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
+				if (StdDraw.isKeyPressed(81)) {
+					done++;
+				}
+			count++;
+			StdDraw.show();
+			StdDraw.pause(50);
+			StdDraw.clear();
 		}
 	}
 	
@@ -45,7 +45,7 @@ public class MazeGame {
 		}
 	}
 
-	public static void lightSource(int [][]Board, long startCount) {
+	public static void lightSource(int [][]Board, double startCount) {
 		//Finds location of player
 		int x=0;
 		int y=0;
@@ -58,12 +58,14 @@ public class MazeGame {
 			}
 		}
 		StdDraw.setPenRadius(0.055);//Sets radius of drawn circles
-		double radiusReduction=startCount/300;//Takes time difference between when started running and current time, divide by 50000 to make a small enough number
-		double radius=0.4-radiusReduction;//Subtracts 0.4 from above to get radius value
-		while(radius<2) {//Starts while loop, will go until the radius value is 2
-			StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);//Prints circle with radius value of 'radius'
-			radius=radius+0.05;//Adds more to radius
-			//Basically is printing a whole bunch of circles around player
+		double radiusReduction=startCount/300;//Divides startCount by a constant to change speed of circle reduction
+		double radius=0.4-radiusReduction;
+		if (radius>0) {
+			while(radius<2) {//Starts while loop, will go until the radius value is 2
+				StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);//Prints circle with radius value of 'radius'
+				radius=radius+0.05;//Adds more to radius
+				//Basically is printing a whole bunch of circles around player
+			}
 		}
 		
 	}
