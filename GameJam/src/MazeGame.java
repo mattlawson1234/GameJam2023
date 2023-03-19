@@ -225,8 +225,5 @@ public class MazeGame {
 			}
 			
 		return Board;
-
 	}
-
-
 }
