@@ -87,7 +87,18 @@ public class MazeGame {
 
 		// Declare variables for the coordinates of the entrance tile
 		int entranceCoordOne = (9 + (int)(Math.random() * 2));
-		int entranceCoordTwo = (9 + (int)(Math.random() * 2))
+		int entranceCoordTwo = (9 + (int)(Math.random() * 2));
+
+		// Fill the maze with a null value
+		for(int i = 0; i < 20; i++){
+
+			for(int j = 0; j < 20; j++){
+
+				maze[i][j] = 99;
+
+			}
+
+		}
 
 		// Randomly generate start tile in the middle of the maze
 		maze[entranceCoordOne][entranceCoordTwo] = 2;
@@ -175,7 +186,29 @@ public class MazeGame {
 				// Check if coordinates exist at the current point in the array
 				if(coordinatesFromStart[i] != 0){
 
-					// Check if there are empty spaces around the 
+					// Generate a random path or wall tile directly above the current path tile if the tile is empty
+					if(maze[coordinatesFromStart[i] + 1][coordinatesFromStart[i+1]] == 99){
+
+						int random = (int)(Math.random() * 4);
+						maze[coordinatesFromStart[i] + 1][coordinatesFromStart[i+1]] = random / random;
+
+					}
+
+					// Generate a random path or wall tile directly below the current path tile if the tile is empty
+					if(maze[coordinatesFromStart[i] - 1][coordinatesFromStart[i+1]] == 99){
+
+						int random = (int)(Math.random() * 4);
+						maze[coordinatesFromStart[i] - 1][coordinatesFromStart[i+1]] = random / random;
+
+					}
+					
+					// Generate a random path or wall tile directly to the left the current path tile if the tile is empty
+					if(maze[coordinatesFromStart[i]][coordinatesFromStart[i+1] - 1] == 99){
+
+						int random = (int)(Math.random() * 4);
+						maze[coordinatesFromStart[i]][coordinatesFromStart[i+1] - 1] = random / random;
+
+					}
 
 				}
 			
