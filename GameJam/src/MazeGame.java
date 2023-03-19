@@ -1,3 +1,4 @@
+import java.awt.Font;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -58,14 +59,19 @@ public class MazeGame {
 			}
 		}
 		StdDraw.setPenRadius(0.055);//Sets radius of drawn circles
-		double radiusReduction=startCount/300;//Divides startCount by a constant to change speed of circle reduction
+		double radiusReduction=startCount/600;//Divides startCount by a constant to change speed of circle reduction
 		double radius=0.4-radiusReduction;
-		if (radius>0) {
+		if (radius>0.0255) {
 			while(radius<2) {//Starts while loop, will go until the radius value is 2
 				StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);//Prints circle with radius value of 'radius'
 				radius=radius+0.05;//Adds more to radius
 				//Basically is printing a whole bunch of circles around player
 			}
+		}
+		else {
+			Font font = new Font("Arial", Font.BOLD, 80);
+			StdDraw.setFont(font);
+			StdDraw.text(0.5, 0.5, "You Lose");
 		}
 		
 	}
