@@ -230,3 +230,5 @@ public class MazeGame {
 
 
 }
+
+// I hate it here
