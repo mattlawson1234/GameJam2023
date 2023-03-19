@@ -153,13 +153,20 @@ public class MazeGame {
 		// Declare boolean variable to run loop that generates the maze path
 		boolean validMaze = false;
 
+		// Declare array to store current tile coordinates
+		int[] coordinates = new int[100];
+
+		// Assign coordinates of start tile and path tile adjacent to exit tile to array
+		coordinates[0] = entranceCoordOne;
+		coordinates[1] = entranceCoordTwo;
+		coordinates[2] = endCoordOne;
+		coordinates[3] = endCoordTwo;
+
 		// Loop to generate maze path
 		do{
 
 			// Declare boolean variable to run loop that generates at least one path tile around currently selected tile
 			boolean pathTileExists = false;
-
-			// 
 
 
 		}while(!validMaze);
