@@ -6,6 +6,10 @@ import java.util.Scanner;
 
 public class MazeGame {
 	public static void main (String[]arg) {
+		oneLevel();
+	}
+	//This prints one level of the maze
+	public static void oneLevel() {
 		int done=0;
 		int count=0;
 		int [][]MazeMain=Matrix();
@@ -23,7 +27,6 @@ public class MazeGame {
 			StdDraw.clear();
 		}
 	}
-	
 	//Prints the board for the player
 	public static void printBoard (int [][]Board) {//Prints the current board
 		for (int count=0; count<10; count++) {
