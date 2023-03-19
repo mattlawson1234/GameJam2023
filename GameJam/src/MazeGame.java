@@ -50,7 +50,7 @@ public class MazeGame {
 		}
 	}
 
-	public static void lightSource(int [][]Board, long startTime) {
+	public static void lightSource(int [][]Board, double startCount) {
 		//Finds location of player
 		int x=0;
 		int y=0;
@@ -63,13 +63,13 @@ public class MazeGame {
 			}
 		}
 		StdDraw.setPenRadius(0.055);//Sets radius of drawn circles
-		double timeDif=(System.currentTimeMillis()-startTime)/50000;//Takes time difference between when started running and current time, divide by 50000 to make a small enough number
-		double radius=0.4-timeDif;//Subtracts 0.4 from above to get radius value
+		double radiusDifference = startCount/600;
+		double radius=0.4-radiusDifference;//Subtracts 0.4 from above to get radius value
+		if (radius>0.0255)
 		while(radius<2) {//Starts while loop, will go until the radius value is 2
 			StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);//Prints circle with radius value of 'radius'
 			radius=radius+0.05;//Adds more to radius
 			//Basically is printing a whole bunch of circles around player
-		}
 		}
 		else {
 			Font font = new Font("Arial", Font.BOLD, 80);
@@ -228,11 +228,7 @@ public class MazeGame {
 
 	}
 
-<<<<<<< Updated upstream
 
 }
 
-// I hate it here
-=======
-}
->>>>>>> Stashed changes
+
