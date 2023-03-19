@@ -85,8 +85,12 @@ public class MazeGame {
 		// Declare array to store maze
 		int[][] maze = new int[20][20];
 
+		// Declare variables for the coordinates of the entrance tile
+		int entranceCoordOne = (9 + (int)(Math.random() * 2));
+		int entranceCoordTwo = (9 + (int)(Math.random() * 2))
+
 		// Randomly generate start tile in the middle of the maze
-		maze[(9 + (int)(Math.random() * 2))][(9 + (int)(Math.random() * 2))] = 2;
+		maze[entranceCoordOne][entranceCoordTwo] = 2;
 
 		// Generate walls along borders of the maze
 		for(int i = 0; i < 20; i++){
@@ -106,24 +110,24 @@ public class MazeGame {
 		}
 
 		// Declare variables to store coordinates of randomly generated end tile
-		int firstCoord = (int)(Math.random() * 2) * 19;			// Coordinate to choose top/bottom row or leftmost/rightmost column
-		int secondCoord = 1 + (int)(Math.random() * 18);		// Coordinate to choose tile with row/column, excluding corner tiles
+		int endCoordOne = (int)(Math.random() * 2) * 19;			// Coordinate to choose top/bottom row or leftmost/rightmost column
+		int endCoordTwo = 1 + (int)(Math.random() * 18);			// Coordinate to choose tile with row/column, excluding corner tiles
 
 		// Randomly generate whether exit tile is along row or column (0 = row, 1 = column)
 		if((int)(Math.random() * 2) == 0){
 
 			// Randomly generate exit tile along top or bottom row
-			maze[firstCoord][secondCoord] = 4;
+			maze[endCoordOne][endCoordTwo] = 4;
 
 			// Place path tile adjacent to the exit tile
-			if(firstCoord == 0){
+			if(endCoordOne == 0){
 
-				maze[firstCoord + 1][secondCoord] = 0;
+				maze[endCoordOne + 1][endCoordTwo] = 0;
 
 			}
 			else{
 
-				maze[firstCoord - 1][secondCoord] = 0;
+				maze[endCoordOne - 1][endCoordTwo] = 0;
 
 			}
 
@@ -131,16 +135,16 @@ public class MazeGame {
 		else{
 
 			// Randomly generate exit tile along leftmost or rightmost column
-			maze[secondCoord][firstCoord] = 4;
+			maze[endCoordTwo][endCoordOne] = 4;
 
-			if(firstCoord == 0){
+			if(endCoordOne == 0){
 
-				maze[secondCoord][firstCoord + 1] = 0;
+				maze[endCoordTwo][endCoordOne + 1] = 0;
 
 			}
 			else{
 
-				maze[secondCoord][firstCoord - 1] = 0;
+				maze[endCoordTwo][endCoordTwo - 1] = 0;
 
 			}
 
@@ -152,7 +156,11 @@ public class MazeGame {
 		// Loop to generate maze path
 		do{
 
-			
+			// Declare boolean variable to run loop that generates at least one path tile around currently selected tile
+			boolean pathTileExists = false;
+
+			// 
+
 
 		}while(!validMaze);
 		
