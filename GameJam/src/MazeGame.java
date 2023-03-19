@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class MazeGame {
 	public static void main (String[]arg) {
-		int done=0;
+		int done=0;			
 		int count=0;
 		int [][]MazeMain=Matrix();
 		while (done==0&&count<226) {
@@ -14,9 +14,9 @@ public class MazeGame {
 			int [][]MazeMain2=MovingMario(MazeMain);
 			printBoard(MazeMain2);
 			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
-			if (StdDraw.isKeyPressed(81)) {	
-				done++;
-			}
+				if (StdDraw.isKeyPressed(81)) {
+					done++;
+				}
 			count++;
 			StdDraw.show();
 			StdDraw.pause(50);
@@ -46,8 +46,8 @@ public class MazeGame {
 			}
 		}
 	}
-	//Method for printing a slowly closing circle around the player
-	public static void lightSource(int [][]Board, double startCount) {
+
+	public static void lightSource(int [][]Board, long startTime) {
 		//Finds location of player
 		int x=0;
 		int y=0;
@@ -60,14 +60,13 @@ public class MazeGame {
 			}
 		}
 		StdDraw.setPenRadius(0.055);//Sets radius of drawn circles
-		double radiusReduction=startCount/600;//Divides startCount by a constant to change speed of circle reduction
-		double radius=0.4-radiusReduction;
-		if (radius>0.0255) {
-			while(radius<2) {//Starts while loop, will go until the radius value is 2
-				StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);//Prints circle with radius value of 'radius'
-				radius=radius+0.05;//Adds more to radius
-				//Basically is printing a whole bunch of circles around player
-			}
+		double timeDif=(System.currentTimeMillis()-startTime)/50000;//Takes time difference between when started running and current time, divide by 50000 to make a small enough number
+		double radius=0.4-timeDif;//Subtracts 0.4 from above to get radius value
+		while(radius<2) {//Starts while loop, will go until the radius value is 2
+			StdDraw.circle(x/10.0+0.05, y/10.0+0.05, radius);//Prints circle with radius value of 'radius'
+			radius=radius+0.05;//Adds more to radius
+			//Basically is printing a whole bunch of circles around player
+		}
 		}
 		else {
 			Font font = new Font("Arial", Font.BOLD, 80);
@@ -104,8 +103,8 @@ public class MazeGame {
 		}
 
 		// Declare variables to store coordinates of randomly generated end tile
-		int firstCoord = (int)(Math.random() * 2) * 19;
-		int secondCoord = (int)(Math.random() * 20);
+		int firstCoord = (int)(Math.random() * 2) * 19;			// Coordinate to choose top/bottom row or leftmost/rightmost column
+		int secondCoord = 1 + (int)(Math.random() * 18);		// Coordinate to choose tile with row/column, excluding corner tiles
 
 		// Randomly generate whether exit tile is along row or column (0 = row, 1 = column)
 		if((int)(Math.random() * 2) == 0){
@@ -113,11 +112,34 @@ public class MazeGame {
 			// Randomly generate exit tile along top or bottom row
 			maze[firstCoord][secondCoord] = 4;
 
+			// Place path tile adjacent to the exit tile
+			if(firstCoord == 0){
+
+				maze[firstCoord + 1][secondCoord] = 0;
+
+			}
+			else{
+
+				maze[firstCoord - 1][secondCoord] = 0;
+
+			}
+
 		}
 		else{
 
 			// Randomly generate exit tile along leftmost or rightmost column
 			maze[secondCoord][firstCoord] = 4;
+
+			if(firstCoord == 0){
+
+				maze[secondCoord][firstCoord + 1] = 0;
+
+			}
+			else{
+
+				maze[secondCoord][firstCoord - 1] = 0;
+
+			}
 
 		}
 
@@ -198,9 +220,10 @@ public class MazeGame {
 					}
 				}
 			}
-
+			
 		return Board;
+
 	}
 
+
 }
-//I Hate Github
