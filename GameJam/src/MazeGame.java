@@ -85,140 +85,32 @@ public class MazeGame {
 		// Declare array to store maze
 		int[][] maze = new int[20][20];
 
-		// Declare variables for the coordinates of the entrance tile
-		int entranceCoordOne = (9 + (int)(Math.random() * 2));
-		int entranceCoordTwo = (9 + (int)(Math.random() * 2));
-
-		// Fill the maze with a null value
+		// Fill maze with null values
 		for(int i = 0; i < 20; i++){
 
-			for(int j = 0; j < 20; j++){
+			for(int j = 0; j < 0; j++){
 
 				maze[i][j] = 99;
 
 			}
-
-		}
-
-		// Randomly generate start tile in the middle of the maze
-		maze[entranceCoordOne][entranceCoordTwo] = 2;
-
-		// Generate walls along borders of the maze
-		for(int i = 0; i < 20; i++){
-
-			// Generate walls along top of the maze
-			maze[0][i] = 1;
-
-			// Generate walls along bottom of the maze
-			maze[19][i] = 1;
-
-			// Generate walls along left side of the maze
-			maze[i][0] = 1;
-
-			// Generate walls along right side of the maze
-			maze[i][19] = 1;
-
-		}
-
-		// Declare variables to store coordinates of randomly generated end tile
-		int endCoordOne = (int)(Math.random() * 2) * 19;			// Coordinate to choose top/bottom row or leftmost/rightmost column
-		int endCoordTwo = 1 + (int)(Math.random() * 18);			// Coordinate to choose tile with row/column, excluding corner tiles
-
-		// Randomly generate whether exit tile is along row or column (0 = row, 1 = column)
-		if((int)(Math.random() * 2) == 0){
-
-			// Randomly generate exit tile along top or bottom row
-			maze[endCoordOne][endCoordTwo] = 4;
-
-			// Place path tile adjacent to the exit tile
-			if(endCoordOne == 0){
-
-				maze[endCoordOne + 1][endCoordTwo] = 0;
-
-			}
-			else{
-
-				maze[endCoordOne - 1][endCoordTwo] = 0;
-
-			}
-
-		}
-		else{
-
-			// Randomly generate exit tile along leftmost or rightmost column
-			maze[endCoordTwo][endCoordOne] = 4;
-
-			if(endCoordOne == 0){
-
-				maze[endCoordTwo][endCoordOne + 1] = 0;
-
-			}
-			else{
-
-				maze[endCoordTwo][endCoordTwo - 1] = 0;
-
-			}
-
-		}
-
-		// Declare boolean variable to run loop that generates the maze path
-		boolean validMaze = false;
-
-		// Declare arrays to store current tile coordinates
-		int[] coordinatesFromStart = new int[400];
-		int[] coordinatesFromEnd = new int[400];
-
-		// Assign coordinates of start tile and path tile adjacent to exit tile to array
-		coordinatesFromStart[0] = entranceCoordOne;
-		coordinatesFromStart[1] = entranceCoordTwo;
-		coordinatesFromEnd[0] = endCoordOne;
-		coordinatesFromEnd[1] = endCoordTwo;
-
-		// Loop to generate maze path
-		do{
-
-			// Declare boolean variable to run loop that generates at least one path tile around currently selected tile
-			boolean pathTileExists = false;
-
-			// Generate tiles around tiles in the coordinates array
-			for(int i = 0; i < 400; i += 2){
-
-				// Check if coordinates exist at the current point in the array
-				if(coordinatesFromStart[i] != 0){
-
-					// Generate a random path or wall tile directly above the current path tile if the tile is empty
-					if(maze[coordinatesFromStart[i] + 1][coordinatesFromStart[i+1]] == 99){
-
-						int random = (int)(Math.random() * 4);
-						maze[coordinatesFromStart[i] + 1][coordinatesFromStart[i+1]] = random / random;
-
-					}
-
-					// Generate a random path or wall tile directly below the current path tile if the tile is empty
-					if(maze[coordinatesFromStart[i] - 1][coordinatesFromStart[i+1]] == 99){
-
-						int random = (int)(Math.random() * 4);
-						maze[coordinatesFromStart[i] - 1][coordinatesFromStart[i+1]] = random / random;
-
-					}
-					
-					// Generate a random path or wall tile directly to the left the current path tile if the tile is empty
-					if(maze[coordinatesFromStart[i]][coordinatesFromStart[i+1] - 1] == 99){
-
-						int random = (int)(Math.random() * 4);
-						maze[coordinatesFromStart[i]][coordinatesFromStart[i+1] - 1] = random / random;
-
-					}
-
-				}
 			
-			}
+		}
 
+		// Choose random starting position and store in coordinates array
+		int[] currentCoordinates = new int[]{(int)Math.random() * 21, (int)Math.random() * 21};
 
-		}while(!validMaze);
+		// Declare and initialze variable to track how many cells are filled
+		int remaining = 400;
 		
+		// Loop to complete maze
+		while(remaining > 0){
 
-		// Return the generated maze
+			// Choose a random tile adjacent to the current tile
+			
+
+		}
+
+		// Return value of maze
 		return maze;
 
 	}
