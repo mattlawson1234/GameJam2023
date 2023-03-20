@@ -20,18 +20,30 @@ public class MazeGame {
 		int[]exit=findExit(MazeMain);
 		int ExitX=getX(exit);
 		int ExitY=getY(exit);
+		int []boost=boosts();
+		int BoostX=getX(boost);
+		int BoostY=getY(boost);
+		boolean boostAvailable=true;
 		for (int count=0;count<226;count++) {
 			StdDraw.enableDoubleBuffering();
 			int [][]MazeMain2=MovingMario(MazeMain);
 			printBoard(MazeMain2);
-			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
 			
 			int []Character=findCharacter(MazeMain2);
 			int PlayerX=getX(Character);
 			int PlayerY=getY(Character);
+			if (PlayerX==BoostX&&PlayerY==BoostY&&boostAvailable) {
+				count=count-50;
+				boostAvailable=false;
+			}
+			if (boostAvailable) {
+				StdDraw.picture(BoostX/10.0+0.05, BoostY/10.0+0.05,"Potion.png",0.05,0.05);
+			}
+			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
 			StdDraw.show();
 			StdDraw.pause(50);
 			StdDraw.clear();
+
 			if (PlayerX==ExitX&&PlayerY==ExitY) {
 				count=226;
 				printBoard(MazeMain2);
@@ -66,6 +78,7 @@ public class MazeGame {
 				}
 			}
 		}
+
 	}
 
 	public static void lightSource(int [][]Board, double startCount) {
@@ -126,7 +139,7 @@ public class MazeGame {
 
 	}
 
-	public static int [][] Matrix () {//initial maze matrix
+	public static int [][] Matrix () {//initial maze matrix made for testing purpose while we developed the generateMaze method
 		int Maze[][]= {
 			{1,1,1,1,1,1,1,1,1,1},
 			{1,0,1,0,0,0,0,0,0,1},
@@ -224,4 +237,29 @@ public class MazeGame {
 		return y;
 	}
 	
+	public static void startScreen() {
+		
+	}
+	public static int[] boosts() {
+		boolean NoBoost=true;
+		int x=0;
+		int y=0;
+		int [][]initialMaze=Matrix();
+		while (NoBoost) {
+			x=(int)(Math.random()*9)+1;
+			y=(int)(Math.random()*9)+1;
+			boolean isPath=checkPath(initialMaze,x,y);
+			if (isPath)
+				NoBoost=false;
+		}
+		int[]boostSpot= {x,y};
+		return boostSpot;
+	}
+	public static boolean checkPath(int [][]Board, int x, int y) {
+		boolean isPath=false;
+		if (Board[x][y]==0) {
+			isPath=true;
+		}
+		return isPath;
+	}
 }
