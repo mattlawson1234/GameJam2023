@@ -171,7 +171,7 @@ public class MazeGame {
 		int x =getX(position);
 		int y = getY(position);
 			
-				if(StdDraw.isKeyPressed(37)) {
+			if(StdDraw.isKeyPressed(37)) {
 				if(x>0) {
 					if(Board[x-1][y]==0||Board[x-1][y]==4||Board[x-1][y]==2) {
 						Board[x-1][y]=2;
