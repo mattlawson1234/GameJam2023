@@ -6,26 +6,44 @@ import java.util.Scanner;
 
 public class MazeGame {
 	public static void main (String[]arg) {
-		oneLevel();
+		boolean alive=true;
+		while (alive) {
+			alive=oneLevel();
+			
+		}	
+		
 	}
 	//This prints one level of the maze
-	public static void oneLevel() {
-		int done=0;			
-		int count=0;
+	public static boolean oneLevel() {	
+		boolean alive=false;
 		int [][]MazeMain=Matrix();
-		while (done==0&&count<226) {
+		int[]exit=findExit(MazeMain);
+		int ExitX=getX(exit);
+		int ExitY=getY(exit);
+		for (int count=0;count<226;count++) {
 			StdDraw.enableDoubleBuffering();
 			int [][]MazeMain2=MovingMario(MazeMain);
 			printBoard(MazeMain2);
 			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
-				if (StdDraw.isKeyPressed(81)) {
-					done++;
-				}
-			count++;
+			
+			int []Character=findCharacter(MazeMain2);
+			int PlayerX=getX(Character);
+			int PlayerY=getY(Character);
 			StdDraw.show();
 			StdDraw.pause(50);
 			StdDraw.clear();
+			if (PlayerX==ExitX&&PlayerY==ExitY) {
+				count=226;
+				printBoard(MazeMain2);
+				Font font = new Font("Arial", Font.BOLD, 40);
+				StdDraw.setFont(font);
+				StdDraw.text(0.5, 0.5, "You Beat This Level");
+				StdDraw.show();
+				StdDraw.pause(5000);
+				alive=true;
+			}
 		}
+		return alive;
 	}
 	//Prints the board for the player
 	public static void printBoard (int [][]Board) {//Prints the current board
@@ -40,28 +58,21 @@ public class MazeGame {
 				if (Board[count][count2]==2) {
 					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Mario.png",0.1,0.1);
 				}
-				//if (Board[count][count2]==3) {
-				//	StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Entrance.png",0.1,0.1);
-				//}
-				//if (Board[count][count2==4]) {
-				//	StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Exit.png",0.1,0.1);
-				//}
+				if (Board[count][count2]==3) {
+					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Entrance.png",0.1,0.1);
+				}
+				if (Board[count][count2]==4) {
+					StdDraw.picture(count/10.0+0.05, count2/10.0+0.05, "Exit.png",0.1,0.1);
+				}
 			}
 		}
 	}
 
 	public static void lightSource(int [][]Board, double startCount) {
-		//Finds location of player
-		int x=0;
-		int y=0;
-		for (int count=0; count<10; count++) {
-			for (int count2=0; count2<10; count2++) {
-				if (Board[count][count2]==2) {
-					x=count;
-					y=count2;
-				}	
-			}
-		}
+		int[]position=findCharacter(Board);
+		int x =getX(position);
+		int y = getY(position);
+		
 		StdDraw.setPenRadius(0.055);//Sets radius of drawn circles
 		double radiusDifference = startCount/600;
 		double radius=0.4-radiusDifference;//Subtracts 0.4 from above to get radius value
@@ -119,12 +130,12 @@ public class MazeGame {
 		int Maze[][]= {
 			{1,1,1,1,1,1,1,1,1,1},
 			{1,0,1,0,0,0,0,0,0,1},
-			{2,0,0,0,1,1,1,1,0,1},
+			{3,2,0,0,1,1,1,1,0,1},
 			{1,1,1,0,1,0,0,0,0,1},
 			{1,0,1,0,1,1,1,1,0,1},
 			{1,0,0,0,1,0,0,0,0,1},
 			{1,1,1,1,1,0,1,1,1,1},
-			{1,0,0,0,0,0,1,0,0,0},
+			{1,0,0,0,0,0,1,0,0,4},
 			{1,0,1,1,1,1,1,0,1,1},
 			{1,0,0,0,0,0,0,0,1,1},
 		};
@@ -133,20 +144,13 @@ public class MazeGame {
 
 	//Method for controlling the player with the four arrow keys
 	public static int[][] MovingMario(int [][]Board) {
-			int x=0;
-			int y=0;
-			for (int count=0; count<10; count++) {
-				for (int count2=0; count2<10; count2++) {
-					if (Board[count][count2]==2) {
-						x=count;
-						y=count2;
-					}	
-				}
-			}
+		int[]position=findCharacter(Board);
+		int x =getX(position);
+		int y = getY(position);
 			
-			if(StdDraw.isKeyPressed(37)) {
+				if(StdDraw.isKeyPressed(37)) {
 				if(x>0) {
-					if(Board[x-1][y]==0) {
+					if(Board[x-1][y]==0||Board[x-1][y]==4) {
 						Board[x-1][y]=2;
 						Board[x][y]=0;
 					}
@@ -154,7 +158,7 @@ public class MazeGame {
 			}
 			if (StdDraw.isKeyPressed(38)) {
 				if(y<9) {
-					if(Board[x][y+1]==0) {
+					if(Board[x][y+1]==0||Board[x][y+1]==4) {
 						Board[x][y+1]=2;
 						Board[x][y]=0;
 					}
@@ -162,7 +166,7 @@ public class MazeGame {
 			}
 			if (StdDraw.isKeyPressed(40)) {
 				if (y>0) {
-					if(Board[x][y-1]==0) {
+					if(Board[x][y-1]==0||Board[x][y-1]==4) {
 						Board[x][y-1]=2;
 						Board[x][y]=0;
 					}
@@ -170,7 +174,7 @@ public class MazeGame {
 			}
 			if (StdDraw.isKeyPressed(39)) {
 				if(x<9) {
-					if(Board[x+1][y]==0) {
+					if(Board[x+1][y]==0||Board[x+1][y]==4) {
 						Board[x+1][y]=2;
 						Board[x][y]=0;
 					}
@@ -179,4 +183,45 @@ public class MazeGame {
 			
 		return Board;
 	}
+	//Finds the exit tile of the random maze and stores in a 1D array as [x,y]
+	public static int[] findExit(int[][]Board) {
+		int x=0;
+		int y=0;
+		for (int count=0; count<10; count++) {
+			for (int count2=0; count2<10; count2++) {
+				if (Board[count][count2]==4) {
+					x=count;
+					y=count2;
+				}
+			}
+		}
+		int []position= {x,y};
+		return position;
+	}
+	//Finds the charcter within the 2D array, returns a 1D array with the x and y position of the chracter
+	public static int[] findCharacter(int[][]Board) {
+		int x=0;
+		int y=0;
+		for (int count=0; count<10; count++) {
+			for (int count2=0; count2<10; count2++) {
+				if (Board[count][count2]==2) {
+					x=count;
+					y=count2;
+				}	
+			}
+		}
+		int[]position = {x,y};
+		return position;
+	}
+	//Returns the x value of the charcter from the 1D array of it's location
+	public static int getX (int[]position) {
+		int x=position[0];
+		return x;
+	}
+	//Returns the y value of the charcter from the 1D array of it's location
+	public static int getY (int[]position) {
+		int y=position[1];
+		return y;
+	}
+	
 }
