@@ -11,7 +11,6 @@ public class MazeSolver {
 		int EndY=getY(End);
 		int x=StartX;
 		int y=StartY;
-		int count=0;
 		int travel=0;
 		int direction1=0;
 		
@@ -219,7 +218,6 @@ public class MazeSolver {
 				}
 				
 			}
-			
 
 		}
 	PrintMatrix(Board);
@@ -265,7 +263,6 @@ public class MazeSolver {
 		return position;
 	}
 
-	//Returns the x value of the charcter from the 1D array of it's location
 	public static int getX (int[]position) {
 		int x=position[0];
 		return x;
