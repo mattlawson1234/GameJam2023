@@ -1,122 +1,154 @@
+import java.awt.Font;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class testaroo {
     
     public static void main(String[] args){
 
-        // Declare maze
+        // Declare array to store maze
         int[][] maze = new int[20][20];
 
-        // Generate maze
+        // Randomly generate a maze
         maze = generateMaze();
 
-        System.out.println();
-
-        // Print maze
-        printMaze(maze);
+        // Print the board
+        printBoard(maze);
 
     }
 
-    // Method to randomly generate maze
-	public static int[][] generateMaze(){
+    // Method to generate a maze
+    public static int[][] generateMaze(){
 
-		// Declare array to store maze
-		int[][] maze = new int[20][20];
+        // Declare array to store maze
+        int[][] maze = new int[20][20];
 
-		// Fill maze with null values and walls
-		maze = fillMazeNull();
+        // Fill maze with empty spaces surrounded by walls
+        maze = fillMaze();
 
-		// Declare and initialze variable to track how many cells are filled
-		int remaining = 324;
+        // Randomly determine the player's starting position and store in variables
+        int startIndexA = findStartCoord(), startIndexB = findStartCoord();
 
-		// Declare boolean variable to store if the randomly generated starting position is the first one
-		boolean startPosition = false;
-		
-		// Loop to complete maze
-		while(remaining > 0){
+        // Place the start tile at those coordinates
+        maze[startIndexA][startIndexB] = 2;
 
-			// Declare counter to store the number of path tiles generated
-			int pathTilesMade = 0;
+        // Declare variables required for randomized walk loop
+        int remaining = 323;        // Counter for the number of empty tiles (323 since the edge of the array takes up 76, and the starting tile takes up 1)
+        boolean firstWalk = true;   // Variable to store if it is currently the first walk
+        
 
-			// Check if player starting position has been determined, and generate starting position accordingly
-            int[] startingPosition = findStartingPosition(maze, startPosition);
+        // Loop for the randomized walks, will continue until all tiles are filled
+        while(remaining > 0){
 
-            // Declare variables that store the current tile position
-            int firstIndex = startingPosition[0], secondIndex = startingPosition[1];
+            if(!searchSpaces(maze)){
 
-            // Change startPosition if player starting position was found
-            if(remaining == 324){
-
-                startPosition = true;
+                break;
 
             }
 
-			// Check if the starting tile has been generated already
-			if(!startPosition){
+            // Declare counter for amount of path tiles placed during current walk
+            int pathPlaced = 0;
 
-				maze[firstIndex][secondIndex] = 3;
-				pathTilesMade++;
-                remaining--;
-				startPosition = true;
+            // Declare array to store the starting position of the walk and another to store the coordinates of a randomly selected adjacent tile
+            int[] walkCoordinates = new int[2];
+            int[] adjacentTile = new int[2];
 
-			}
-			else{
+            // Check if it is currently the first walk
+            if(!firstWalk){
 
-				maze[firstIndex][secondIndex] = 0;
-				pathTilesMade++;
-                remaining--;
+                // Determine the starting position of the next walk and store in an array
+                walkCoordinates = findWalkCoord(maze);
 
-			}
+            }
+            else{
 
-			// Declare variables to store previous tile coordinates
-			int lastFirstIndex = 99, lastSecondIndex = 99;
+                // Store the starting player position as the start of the next walk
+                walkCoordinates[0] = startIndexA;
+                walkCoordinates[1] = startIndexB;
+                firstWalk = false;
 
-			// Loop to start randomized walk of 15 tiles, including the begininng tile
-			while(pathTilesMade < 15){
+            }
 
-				// Declare boolean variable to run loop that chooses a random tile
-				boolean validTile = false;
+            // Check if invalid walk coordinates were found
+            if(walkCoordinates[0] == 0 && walkCoordinates[1] ==0){
 
-				// Declare variables to temporarily store the randomly generated adjacent tile coordinates
-				int tempFirstIndex = 0, tempSecondIndex = 0;
+                // Fill all remaining spaces with walls
+                maze = fillSpaces(maze);
+                break;
 
-				// Choose a random tile adjacent to the current tile
-				while(!validTile){
+            }
 
-					// Create array to store adjacent tile coordinates
-					int[] adjacentTile = findAdjacentTile(firstIndex, secondIndex);
+            // Loop for the current randomized walk, will continue until 14 tiles have been placed
+            while(pathPlaced < 14){
 
-					// Randomly generate coordinates of tile adjacent to current tile
-					tempFirstIndex = adjacentTile[0];
-					tempSecondIndex = adjacentTile[1];
+                // Declare array to store coordinates for checking surroundings
+                int[] currentTile = new int[2];
 
-					// Check if tile is valid
-					validTile = checkAdjacentTile(tempFirstIndex, tempSecondIndex, lastFirstIndex, lastSecondIndex, maze);
+                // Check if any tiles are surrounded by walls
+                for(int i = 1; i < 19; i++){
 
-				}
+                    for(int j = 1; j < 19; j++){
 
-				// Once tile is determined to be valid, update the coordinate variables
-				lastFirstIndex = firstIndex;
-				lastSecondIndex = secondIndex;
-				firstIndex = tempFirstIndex;
-				secondIndex = tempSecondIndex;
+                        // Store coordinates in array
+                        currentTile[0] = i;
+                        currentTile[1] = j;
 
-				// Check if adjacent tile is a path tile
-				if(maze[firstIndex][secondIndex] == 0){
+                        // Check if the tile is surrounded by walls, and fill the space if necessary with a wall
+                        if(checkSurroundings(maze, currentTile)){
 
-					break;
+                            maze[currentTile[0]][currentTile[1]] = 1;
 
-				}
-				else{
+                        }
 
-					// Place a path tile in the current coordinates
-					maze[firstIndex][secondIndex] = 0;
-					pathTilesMade++;
+                    }
+
+                }
+
+                // Find a tile adjacent to the current tile on walk
+                adjacentTile = findAdjacentTile(maze, walkCoordinates);
+
+                // Check if the found adjacent tile was valid
+                if(adjacentTile[0] == 0 && adjacentTile[1] == 0){
+
+                    break;
+
+                }
+                else{
+
+                    maze[adjacentTile[0]][adjacentTile[1]] = 0;
+                    walkCoordinates[0] = adjacentTile[0];
+                    walkCoordinates[1] = adjacentTile[1];
+                    pathPlaced++;
                     remaining--;
 
-				}
+                }
 
-			}
+            }
 
-			System.out.println("Hello");
+            // Place walls around the final walk tile
+            if(maze[walkCoordinates[0] + 1][walkCoordinates[1]] == 99){
+
+                maze[walkCoordinates[0] + 1][walkCoordinates[1]] = 1;
+
+            }
+            if(maze[walkCoordinates[0] - 1][walkCoordinates[1]] == 99){
+
+                maze[walkCoordinates[0] - 1][walkCoordinates[1]] = 1;
+
+            }
+            if(maze[walkCoordinates[0]][walkCoordinates[1] + 1] == 99){
+
+                maze[walkCoordinates[0]][walkCoordinates[1] + 1] = 1;
+
+            }
+            if(maze[walkCoordinates[0]][walkCoordinates[1] - 1] == 99){
+
+                maze[walkCoordinates[0]][walkCoordinates[1] - 1] = 1;
+
+            }
+
 			// Print the maze
 			for(int i = 0; i < 20; i++){
 
@@ -130,41 +162,20 @@ public class testaroo {
 	
 			}
 
-			// Generate walls around the final tile
-			if(maze[firstIndex + 1][secondIndex] == 99){
+			System.out.println();
 
-				maze[firstIndex + 1][secondIndex] = 1;
-                remaining--;
+        }
 
-			}
-			if(maze[firstIndex - 1][secondIndex] == 99){
+        // Generate the exit tile
+        maze = generateExit(maze);
 
-				maze[firstIndex - 1][secondIndex] = 1;
-                remaining--;
+        // Return the value of maze
+        return maze;
 
-			}
-			if(maze[firstIndex][secondIndex + 1] == 99){
+    }
 
-				maze[firstIndex][secondIndex + 1] = 1;
-                remaining--;
-
-			}
-			if(maze[firstIndex][secondIndex - 1] == 99){
-
-				maze[firstIndex][secondIndex - 1] = 1;
-                remaining--;
-
-			}
-
-		}
-
-		// Return value of maze
-		return maze;
-
-	}
-
-    // Method to fill maze with null values and walls
-	public static int[][] fillMazeNull(){
+    // Method to fill maze with spaces surrounded by walls
+	public static int[][] fillMaze(){
 
 		// Declare array to store null values
 		int[][] nullMaze = new int[20][20];
@@ -202,118 +213,37 @@ public class testaroo {
 
 	}
 
-	// Method to generate coordinates for adjacent tile
-	public static int[] findAdjacentTile(int firstIndex, int secondIndex){
+    // Method to determine a coordinate for the starting position of the player
+    public static int findStartCoord(){
 
-		// Declare variable to store coordinate of adjacent tile
-		int[] coordinates = new int[2];
+        // Declare variable to store randomly generated starting position
+        int coordinate;
 
-		// Generate random number to determine direction of coordinate
-		int random = (int)(Math.random() * 4);
+        // Randomly generate starting coordinate that is not on the edge of the board
+        coordinate = 1 + (int)(Math.random() * 18);
 
-		// Check random number and assign direction accordingly (0: up, 1: right, 2: down, 3: left)
-		if(random == 0){
+        // Return the value of coordinate
+        return coordinate;
 
-			coordinates[0] = firstIndex + 1;
-			coordinates[1] = secondIndex;
+    }
 
-		}
-		else if(random == 1){
+    // Method to check maze for space tiles
+    public static boolean searchSpaces(int[][] maze){
 
-			coordinates[0] = firstIndex;
-			coordinates[1] = secondIndex + 1;
+        // Declare boolean variable to store if spaces are found
+        boolean foundSpaces = true;
 
-		}
-		else if(random == 2){
+        // Declare counter variable for number of spaces found
+        int spaces = 0;
 
-			coordinates[0] = firstIndex - 1;
-			coordinates[1] = secondIndex;
+        // Check the maze for space tiles
+        for(int i = 0; i < 20; i++){
 
-		}
-		else {
+            for(int j = 0; j < 20; j++){
 
-			coordinates[0] = firstIndex;
-			coordinates[1] = secondIndex - 1;
+                if(maze[i][j] == 99){
 
-		}
-
-		// Return value of coordinate
-		return coordinates;
-
-	}
-
-    // Method to check the adjacent tile
-	public static boolean checkAdjacentTile(int tempFirstIndex, int tempSecondIndex, int lastFirstIndex, int lastsecondIndex, int[][] maze){
-
-		// Declare boolean variable to store if adjacent tile is valid
-		boolean validTile = false;
-
-		// Check if adjacent tile is within scope of array, and within boundaries
-		if(tempFirstIndex >= 1 && tempFirstIndex <= 18 && tempSecondIndex >= 1 && tempSecondIndex <= 18){
-
-			// Check if adjacent tile is not the previously travelled tile
-			if(tempFirstIndex != lastFirstIndex && tempSecondIndex != lastsecondIndex){
-
-				// Check if adjacent tile is not a wall
-				if(maze[tempFirstIndex][tempSecondIndex] != 1){
-
-					validTile = true;
-
-				}
-
-			}
-
-		}
-
-		// Return value of validTile
-		return validTile;
-
-	}
-
-	// Method to choose starting position for walk
-	public static int[] findStartingPosition(int[][] maze, boolean startPosition){
-
-		// Declare variable to store starting coordinates
-		int[] startingCoordinates = new int[2];
-
-		// Declare boolean variable to store if starting coordinates have been found
-		boolean foundStartingCoordinates = false;
-
-        // Check if player starting position has already been found
-        if(!startPosition){
-
-            startingCoordinates[0] = 1 + (int)(Math.random() * 18);
-            startingCoordinates[1] = 1 + (int)(Math.random() * 18);
-
-        }
-        else{
-
-            // Search maze for path tile with free spaces next to it
-            for(int i = 0; i < 20; i++){
-
-                for(int j = 0; j < 20; j++){
-
-                    // Check if current tile is a path tile
-                    if(maze[i][j] == 0 && i != 0 && i != 19 && j != 0 && j != 19){
-                        
-                        // Check if there is at least one empty space around the path tile
-                        if(maze[i + 1][j] == 99 || maze[i - 1][j] == 99 || maze[i][j + 1] == 99 || maze[i][j - 1] == 99){
-
-                            startingCoordinates[0] = i;
-                            startingCoordinates[1] = j;
-                            foundStartingCoordinates = true;
-                            break;
-
-                        }
-
-                    }
-
-                }
-
-                // Check if starting coordinates have been found
-                if(foundStartingCoordinates){
-
-                    break;
+                    spaces++;
 
                 }
 
@@ -321,12 +251,465 @@ public class testaroo {
 
         }
 
+        // Check if spaces were found
+        if(spaces == 0){
+
+            foundSpaces = false;
+
+        }
+
+        // Return the value of foundSpaces
+        return foundSpaces;
+
+    }
+
+    // Method to determine the starting position of the next walk
+    public static int[] findWalkCoord(int[][] maze){
+
+        // Declare array to store the coordinates of the walk starting position
+        int[] walkCoordinates = new int[2];
+
+        // Declare boolean variable to store whether loop has found a valid starting tile
+        boolean validTile = false;
+
+        // Declare counter to check if loop is unable to find a valid walk tile
+        int counter = 0;
+
+        // Loop to find a starting tile for the walk
+        while(!validTile){
+
+            // Randomly select a path tile in the maze
+            walkCoordinates = findPathTile(maze);
+
+			// Declare array to store tile next to start coordinates
+			int[] adjacentTile = new int[2];
+
+			// Assign tile above
+			adjacentTile[0] = walkCoordinates[0] - 1;
+			adjacentTile[1] = walkCoordinates[1];
+
+			// Check tile above
+			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+				// Check for path cube
+				if(findPathCube(maze, adjacentTile)){
+
+					maze[adjacentTile[0]][adjacentTile[1]] = 1;
+
+				}
+
+			}
+
+			// Assign tile below
+			adjacentTile[0] = walkCoordinates[0] + 1;
+			adjacentTile[1] = walkCoordinates[1];
+
+			// Check tile below
+			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+				// Check for path cube
+				if(findPathCube(maze, adjacentTile)){
+
+					maze[adjacentTile[0]][adjacentTile[1]] = 1;
+
+				}
+
+			}
+
+			// Assign tile to the left
+			adjacentTile[0] = walkCoordinates[0];
+			adjacentTile[1] = walkCoordinates[1] - 1;
+
+			// Check tile to the left
+			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+				// Check for path cube
+				if(findPathCube(maze, adjacentTile)){
+
+					maze[adjacentTile[0]][adjacentTile[1]] = 1;
+
+				}
+
+			}
+
+			// Assign tile to the right
+			adjacentTile[0] = walkCoordinates[0];
+			adjacentTile[1] = walkCoordinates[1] + 1;
+
+			// Check tile to the right
+			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+				// Check for path cube
+				if(findPathCube(maze, adjacentTile)){
+
+					maze[adjacentTile[0]][adjacentTile[1]] = 1;
+
+				}
+
+			}
+
+			// Check if spaces still exist around the selected tile
+			if(findSpaces(maze, walkCoordinates)){
+
+				validTile = true;
+
+			}
+
+            // Increment the counter if search is unsuccessful
+            counter++;
+
+            // Check if the counter is high
+            if(counter > 500){
+
+                walkCoordinates[0] = 0;
+                walkCoordinates[1] = 0;
+                break;
+
+            }
+
+        }
+
+        // Return the value of walkCoordinates
+        return walkCoordinates;
+
+    }
+
+    // Method to fill all remaining maze spaces with walls
+    public static int[][] fillSpaces(int[][] maze){
+
+        // Replace all space tiles with walls
+        for(int i = 0; i < 20; i++){
+
+            for(int j = 0; j < 20; j++){
+
+                if(maze[i][j] == 99){
+
+                    maze[i][j] = 1;
+
+                }
+
+            }
+
+        }
+
+        // Return the value of maze
+        return maze;
+
+    }
+
+    // Method to randomly select a path tile
+    public static int[] findPathTile(int[][] maze){
+
+        // Declare array to store the randomly selected path tile
+        int[] pathTile = new int[2];
+
+        // Declare boolean variable to store whether loop has found a path tile
+        boolean foundPath = false;
+
+        // Loop to find path tile
+        while(!foundPath){
+
+            // Pick a random tile in the maze that isn't on the edge and store in the walkCoordinates array
+            for(int i = 0; i < 2; i++){
+
+                pathTile[i] = 1 + (int)(Math.random() * 18);
+
+            }
+
+            // Check if the randomly selected tile is a path tile
+            if(maze[pathTile[0]][pathTile[1]] == 0){
+
+                foundPath = true;
+
+            }
+
+        }
+
+        // Return the value of pathTile
+        return pathTile;
+
+    }
+
+    // Method to check if starting walk tile is surrounded by walls
+    public static boolean checkSurroundings(int[][] maze, int[] currentTile){
+
+        // Declare boolean variable to store if a surrounded tile is found
+        boolean tileSurrounded = false;
+
+        // Check around the selected tile to see if it is surrounded
+        if(maze[currentTile[0] + 1][currentTile[1]] == 1 && maze[currentTile[0] - 1][currentTile[1]] == 1 &&
+        maze[currentTile[0]][currentTile[1] + 1] == 1 && maze[currentTile[0]][currentTile[1] - 1] == 1){
+
+            tileSurrounded = true;
+
+        }
+
+        // Return the value of tileSurrounded
+        return tileSurrounded;
+
+    }
+
+    // Method to check if there are empty spaces around the randomly chosen path tile
+    public static boolean findSpaces(int[][] maze, int[] walkCoordinates){
+
+        // Declare variable to store if spaces are found around the path tile
+        boolean validTile = false;
+
+        // Check around tile for spaces
+        if(maze[walkCoordinates[0] + 1][walkCoordinates[1]] == 99){
+
+            validTile = true;
+
+        }
+        else if(maze[walkCoordinates[0] - 1][walkCoordinates[1]] == 99){
+
+            validTile = true;
+
+        }
+        else if(maze[walkCoordinates[0]][walkCoordinates[1] + 1] == 99){
+
+            validTile = true;
+
+        }
+        else if(maze[walkCoordinates[0]][walkCoordinates[1] - 1] == 99){
+
+            validTile = true;
+
+        }
+
+        // Return the value of validTile
+        return validTile;
+
+    }
+
+    // Method to find a valid adjacent tile
+    public static int[] findAdjacentTile(int[][] maze, int[] walkCoordinates){
+
+        // Declare array to store the coordinates of the adjacent tile
+        int[] adjacentTile = new int[2];
+
+        // Declare boolean variable to store if loop has found a valid adjacent tile
+        boolean validTile = false;
+
+        // Loop to find an empty tile adjacent to the current path tile
+        while(!validTile){
+
+            // Declare variable for direction and assign random value corresponding to one of the 4 directions
+            int direction = (int)(Math.random() * 4);
+
+            // Assign adjacent tile based on direction (0: up, 1: down, 2: left, 3: right)
+            switch(direction){
+
+                case(0):{
+
+                    if(maze[walkCoordinates[0] - 1][walkCoordinates[1]] == 99 && walkCoordinates[0] > 1){
+
+                        adjacentTile[0] = walkCoordinates[0] - 1;
+                        adjacentTile[1] = walkCoordinates[1];
+                        validTile = true;
+                    }
+
+                    break;
+
+                }
+                case(1):{
+
+                    if(maze[walkCoordinates[0] + 1][walkCoordinates[1]] == 99 && walkCoordinates[0] < 18){
+
+                        adjacentTile[0] = walkCoordinates[0] + 1;
+                        adjacentTile[1] = walkCoordinates[1];
+                        validTile = true;
+                    }
+
+                    break;
+
+                }
+                case(2):{
+
+                    if(maze[walkCoordinates[0]][walkCoordinates[1] - 1] == 99 && walkCoordinates[1] > 1){
+
+                        adjacentTile[0] = walkCoordinates[0];
+                        adjacentTile[1] = walkCoordinates[1] - 1;
+                        validTile = true;
+                    }
+
+                    break;
+
+                }
+                case(3):{
+
+                    if(maze[walkCoordinates[0]][walkCoordinates[1] + 1] == 99 && walkCoordinates[1] < 18){
+
+                        adjacentTile[0] = walkCoordinates[0];
+                        adjacentTile[1] = walkCoordinates[1] + 1;
+                        validTile = true;
+                    }
+
+                    break;
+
+                }
+
+            }
+
+            // Check if path has hit a dead end
+            if(findDeadEnd(maze, walkCoordinates)){
+
+                break;
+
+            }
+
+            // Check if the tile is a path tile
+            else if(maze[adjacentTile[0]][adjacentTile[1]] == 0){
+
+                break;
+
+            }
+
+            // Check if the tile is empty
+            else if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+                // Check if there is a path cube
+                if(findPathCube(maze, adjacentTile)){
+
+                    maze[adjacentTile[0]][adjacentTile[1]] = 1;
+                    validTile = false;
+
+                }
+
+
+            }
+
+            // Check if the path is trying to wander into a wall
+            else if(maze[adjacentTile[0]][adjacentTile[1]] == 1){
+
+                validTile = false;
+
+            }
+            else{
+
+                validTile = true;
+
+            }
+
+        }
         
+        // Return the value of adjacentTile
+        return adjacentTile;
 
-		// Return the value of startingCoordinates
-		return startingCoordinates;
+    }
 
-	}
+    // Method to generate the exit tile (must be at least 5 spaces away)
+    public static int[][] generateExit(int[][] maze){
+
+        // Declare an array to store the coordinates of the exit tile
+        int[] exitTile = new int[2];
+
+		// Generate a random path tile
+		exitTile = findPathTile(maze);
+
+        // Assign exit tile to maze
+        maze[exitTile[0]][exitTile[1]] = 4;
+
+        // Return the value of maze
+        return maze;
+
+    }
+
+    // Method to check for dead ends
+    public static boolean findDeadEnd(int[][] maze, int[] walkCoordinates){
+
+        // Declare boolean variable to store if a dead end is found
+        boolean deadEnd = true;
+
+        // Search around current walk coordinate for free space
+        if(findSpaces(maze, walkCoordinates)){
+
+            deadEnd = false;
+
+        }
+
+        // Return the value of deadEnd
+        return deadEnd;
+
+    }
+
+    // Method to determine if placing a path tile will create a path cube
+    public static boolean findPathCube(int[][] maze, int[] adjacentTile){
+
+        // Declare integer to store how many walls need to be placed if multiple path cubes are found
+        boolean pathCube = false;
+
+        // Declare array to store currently selected corner
+        int[] corner = new int[2];
+
+        // Assign top left corner coordinates to corner array
+        corner[0] = adjacentTile[0] - 1;
+        corner[1] = adjacentTile[1] - 1;
+
+        // Check if the corner is a path tile
+        if(maze[corner[0]][corner[1]] == 0){
+
+            // Check if the corner has path tiles to the right and below
+            if(maze[corner[0]][corner[1] + 1] == 0 && maze[corner[0] + 1][corner[1]] == 0){
+
+                pathCube = true;
+                
+            }
+
+        }
+
+        // Assign top right corner coordinates to corner array
+        corner[0] = adjacentTile[0] - 1;
+        corner[1] = adjacentTile[1] + 1;
+
+        // Check if the corner is a path tile
+        if(maze[corner[0]][corner[1]] == 0){
+
+            // Check if the corner has path tiles to the left and below
+            if(maze[corner[0]][corner[1] - 1] == 0 && maze[corner[0] + 1][corner[1]] == 0){
+
+                pathCube = true;
+                
+            }
+
+        }
+
+        // Assign bottom left corner coordinates to corner array
+        corner[0] = adjacentTile[0] + 1;
+        corner[1] = adjacentTile[1] - 1;
+
+        // Check if the corner is a path tile
+        if(maze[corner[0]][corner[1]] == 0){
+
+            // Check if the corner has path tiles to the right and above
+            if(maze[corner[0]][corner[1] + 1] == 0 && maze[corner[0] - 1][corner[1]] == 0){
+
+                pathCube = true;
+                
+            }
+
+        }
+
+        // Assign bottom right corner coordinates to corner array
+        corner[0] = adjacentTile[0] + 1;
+        corner[1] = adjacentTile[1] + 1;
+
+        // Check if the corner is a path tile
+        if(maze[corner[0]][corner[1]] == 0){
+
+            // Check if the corner has path tiles to the left and above
+            if(maze[corner[0]][corner[1] - 1] == 0 && maze[corner[0] - 1][corner[1]] == 0){
+
+                pathCube = true;
+                
+            }
+
+        }
+
+        // Return the value of pathCube
+        return pathCube;
+
+    }
 
     // Method to print the maze
     public static void printMaze(int[][] maze){
@@ -336,7 +719,7 @@ public class testaroo {
 
             for(int j = 0; j < 20; j++){
 
-                System.out.print(maze[i][j] + " ");
+                System.out.print(maze[i][j] + "\t");
 
             }
 
@@ -344,6 +727,37 @@ public class testaroo {
 
         }
 
-    }   
+    }
+
+    //Prints the board for the player
+	public static void printBoard (int [][]Board) {//Prints the current board
+
+		for (int count=0; count<20; count++) {
+
+			for (int count2=0; count2<20; count2++) {
+
+				if (Board[count][count2]==1) {
+
+					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Brick.png",0.05,0.05);
+
+				}
+				if (Board[count][count2]==0) {
+					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Path.png",0.05,0.05);
+				}
+				if (Board[count][count2]==2) {
+					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Mario.png",0.05,0.05);
+				}
+				if (Board[count][count2]==3) {
+					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Entrance.png",0.05,0.05);
+				}
+				if (Board[count][count2]==4) {
+					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Exit.png",0.05,0.05);
+				}
+
+			}
+
+		}
+
+	}
 
 }

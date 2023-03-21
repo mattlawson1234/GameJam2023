@@ -103,7 +103,7 @@ public class MazeGame {
 		
 	}
 
-	// Method to generate a maze
+    // Method to generate a maze
     public static int[][] generateMaze(){
 
         // Declare array to store maze
@@ -233,6 +233,21 @@ public class MazeGame {
 
             }
 
+			// Print the maze
+			for(int i = 0; i < 20; i++){
+
+				for(int j = 0; j < 20; j++){
+	
+					System.out.print(maze[i][j] + "\t");
+	
+				}
+	
+				System.out.println();
+	
+			}
+
+			System.out.println();
+
         }
 
         // Generate the exit tile
@@ -350,22 +365,79 @@ public class MazeGame {
             // Randomly select a path tile in the maze
             walkCoordinates = findPathTile(maze);
 
-            // Check if starting the walk at the selected tile would cause a path cube
-            if(findPathCube(maze, walkCoordinates)){
+			// Declare array to store tile next to start coordinates
+			int[] adjacentTile = new int[2];
 
-                maze[walkCoordinates[0]][walkCoordinates[1]] = 1;
+			// Assign tile above
+			adjacentTile[0] = walkCoordinates[0] - 1;
+			adjacentTile[1] = walkCoordinates[1];
 
-            }
-            else{
+			// Check tile above
+			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
 
-                // Check if there are spaces around the randomly selected path tile
-                if(findSpaces(maze, walkCoordinates)){
+				// Check for path cube
+				if(findPathCube(maze, adjacentTile)){
 
-                    validTile = true;
+					maze[adjacentTile[0]][adjacentTile[1]] = 1;
 
-                }
+				}
 
-            }
+			}
+
+			// Assign tile below
+			adjacentTile[0] = walkCoordinates[0] + 1;
+			adjacentTile[1] = walkCoordinates[1];
+
+			// Check tile below
+			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+				// Check for path cube
+				if(findPathCube(maze, adjacentTile)){
+
+					maze[adjacentTile[0]][adjacentTile[1]] = 1;
+
+				}
+
+			}
+
+			// Assign tile to the left
+			adjacentTile[0] = walkCoordinates[0];
+			adjacentTile[1] = walkCoordinates[1] - 1;
+
+			// Check tile to the left
+			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+				// Check for path cube
+				if(findPathCube(maze, adjacentTile)){
+
+					maze[adjacentTile[0]][adjacentTile[1]] = 1;
+
+				}
+
+			}
+
+			// Assign tile to the right
+			adjacentTile[0] = walkCoordinates[0];
+			adjacentTile[1] = walkCoordinates[1] + 1;
+
+			// Check tile to the right
+			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+				// Check for path cube
+				if(findPathCube(maze, adjacentTile)){
+
+					maze[adjacentTile[0]][adjacentTile[1]] = 1;
+
+				}
+
+			}
+
+			// Check if spaces still exist around the selected tile
+			if(findSpaces(maze, walkCoordinates)){
+
+				validTile = true;
+
+			}
 
             // Increment the counter if search is unsuccessful
             counter++;
@@ -443,14 +515,14 @@ public class MazeGame {
     }
 
     // Method to check if starting walk tile is surrounded by walls
-    public static boolean checkSurroundings(int[][] maze, int[] walkCoordinates){
+    public static boolean checkSurroundings(int[][] maze, int[] currentTile){
 
         // Declare boolean variable to store if a surrounded tile is found
         boolean tileSurrounded = false;
 
         // Check around the selected tile to see if it is surrounded
-        if(maze[walkCoordinates[0] + 1][walkCoordinates[1]] == 1 && maze[walkCoordinates[0] - 1][walkCoordinates[1]] == 1 &&
-        maze[walkCoordinates[0]][walkCoordinates[1] + 1] == 1 && maze[walkCoordinates[0]][walkCoordinates[1] - 1] == 1){
+        if(maze[currentTile[0] + 1][currentTile[1]] == 1 && maze[currentTile[0] - 1][currentTile[1]] == 1 &&
+        maze[currentTile[0]][currentTile[1] + 1] == 1 && maze[currentTile[0]][currentTile[1] - 1] == 1){
 
             tileSurrounded = true;
 
@@ -616,32 +688,8 @@ public class MazeGame {
         // Declare an array to store the coordinates of the exit tile
         int[] exitTile = new int[2];
 
-        // Declare a boolean variable to store if a valid 
-        boolean validExit = true;
-
-        // Loop to find a valid exit tile
-        while(validExit){
-
-            // Generate a random path tile
-            exitTile = findPathTile(maze);
-
-            // Check if there is a start tile within 5 spaces of the exit tile
-            for(int i = -2; i < 3; i++){
-
-                for(int j = -2; j < 3; j++){
-
-                    if(exitTile[0] + i < 18 && exitTile[0] + i > 1 && exitTile[1] + j < 18 &&
-                    exitTile[1] + j > 1 && maze[exitTile[0] + i][exitTile[1] + j] == 3){
-
-                        validExit = false;
-
-                    }
-
-                }
-
-            }
-
-        }
+		// Generate a random path tile
+		exitTile = findPathTile(maze);
 
         // Assign exit tile to maze
         maze[exitTile[0]][exitTile[1]] = 4;
@@ -744,24 +792,6 @@ public class MazeGame {
 
         // Return the value of pathCube
         return pathCube;
-
-    }
-
-    // Method to print the maze
-    public static void printMaze(int[][] maze){
-
-        // Print the maze
-        for(int i = 0; i < 20; i++){
-
-            for(int j = 0; j < 20; j++){
-
-                System.out.print(maze[i][j] + "\t");
-
-            }
-
-            System.out.println();
-
-        }
 
     }
 
