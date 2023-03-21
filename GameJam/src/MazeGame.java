@@ -232,10 +232,16 @@ public class MazeGame {
 
             }
 
-        }
+            // Change the final walk tile to the exit tile if it is the first walk
+            if(firstWalk){
 
-        // Generate a random exit tile
-        maze = generateExit(maze);
+                // Generate the exit tile
+                maze = generateExit(maze, walkCoordinates);
+                firstWalk = false;
+
+            }
+
+        }
 
         // Return the value of maze
         return maze;
@@ -505,13 +511,6 @@ public class MazeGame {
         // Loop to find an empty tile adjacent to the current path tile
         while(!validTile){
 
-            // Check if path has hit a dead end
-            if(findDeadEnd(maze, walkCoordinates)){
-
-                break;
-
-            }
-
             // Declare variable for direction and assign random value corresponding to one of the 4 directions
             int direction = (int)(Math.random() * 4);
 
@@ -525,16 +524,7 @@ public class MazeGame {
                         adjacentTile[0] = walkCoordinates[0] - 1;
                         adjacentTile[1] = walkCoordinates[1];
                         validTile = true;
-
                     }
-
-                    // Check if adjacent tile is a wall or path tile
-                    else if(maze[walkCoordinates[0] - 1][walkCoordinates[1]] == 0 || maze[walkCoordinates[0] - 1][walkCoordinates[1]] == 1){
-
-                        validTile = true;
-
-                    }
-                    
 
                     break;
 
@@ -546,14 +536,6 @@ public class MazeGame {
                         adjacentTile[0] = walkCoordinates[0] + 1;
                         adjacentTile[1] = walkCoordinates[1];
                         validTile = true;
-
-                    }
-
-                    // Check if adjacent tile is a wall or path tile
-                    else if(maze[walkCoordinates[0] + 1][walkCoordinates[1]] == 0 || maze[walkCoordinates[0] + 1][walkCoordinates[1]] == 1){
-
-                        validTile = true;
-
                     }
 
                     break;
@@ -566,14 +548,6 @@ public class MazeGame {
                         adjacentTile[0] = walkCoordinates[0];
                         adjacentTile[1] = walkCoordinates[1] - 1;
                         validTile = true;
-
-                    }
-
-                    // Check if adjacent tile is a wall or path tile
-                    else if(maze[walkCoordinates[0]][walkCoordinates[1] - 1] == 0 || maze[walkCoordinates[0]][walkCoordinates[1] - 1] == 1){
-
-                        validTile = true;
-
                     }
 
                     break;
@@ -586,14 +560,6 @@ public class MazeGame {
                         adjacentTile[0] = walkCoordinates[0];
                         adjacentTile[1] = walkCoordinates[1] + 1;
                         validTile = true;
-
-                    }
-
-                    // Check if adjacent tile is a wall or path tile
-                    else if(maze[walkCoordinates[0]][walkCoordinates[1] + 1] == 0 || maze[walkCoordinates[0]][walkCoordinates[1] + 1] == 1){
-
-                        validTile = true;
-
                     }
 
                     break;
@@ -602,11 +568,43 @@ public class MazeGame {
 
             }
 
-            // Check if there is a path cube
-            if(validTile && findPathCube(maze, adjacentTile) && adjacentTile[0] != 0 && adjacentTile[1] != 0){
+            // Check if path has hit a dead end
+            if(findDeadEnd(maze, walkCoordinates)){
 
-                maze[adjacentTile[0]][adjacentTile[1]] = 1;
+                break;
+
+            }
+
+            // Check if the tile is a path tile
+            else if(maze[adjacentTile[0]][adjacentTile[1]] == 0){
+
+                break;
+
+            }
+
+            // Check if the tile is empty
+            else if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
+
+                // Check if there is a path cube
+                if(findPathCube(maze, adjacentTile)){
+
+                    maze[adjacentTile[0]][adjacentTile[1]] = 1;
+                    validTile = false;
+
+                }
+
+
+            }
+
+            // Check if the path is trying to wander into a wall
+            else if(maze[adjacentTile[0]][adjacentTile[1]] == 1){
+
                 validTile = false;
+
+            }
+            else{
+
+                validTile = true;
 
             }
 
@@ -618,15 +616,10 @@ public class MazeGame {
     }
 
     // Method to generate the exit tile at the end of the first walk
-    public static int[][] generateExit(int[][] maze){
+    public static int[][] generateExit(int[][] maze, int[] walkCoordinates){
 
-        // Declare array to store exit tile
-        int[] exitTile = new int[2];
-
-        // Choose a random path tile and assign to exit tile
-        exitTile = findPathTile(maze);
-
-        maze[exitTile[0]][exitTile[1]] = 4;
+        // Assign exit tile to maze
+        maze[walkCoordinates[0]][walkCoordinates[1]] = 4;
 
         // Return the value of maze
         return maze;
