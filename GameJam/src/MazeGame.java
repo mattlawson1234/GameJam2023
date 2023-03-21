@@ -7,14 +7,15 @@ import java.util.Scanner;
 public class MazeGame {
 	public static void main (String[]arg) {
 		boolean alive=true;
+		int levelsCompleted=0;
 		while (alive) {
-			alive=oneLevel();
-			
+			alive=oneLevel(levelsCompleted);
+			levelsCompleted++;
 		}	
 		
 	}
 	//This prints one level of the maze
-	public static boolean oneLevel() {	
+	public static boolean oneLevel(int levelsDone) {	
 		boolean alive=false;
 		int [][]MazeMain=generateMaze();
 		int[]exit=findExit(MazeMain);
@@ -23,7 +24,11 @@ public class MazeGame {
 		int []boost=boosts(MazeMain);
 		int BoostX=getX(boost);
 		int BoostY=getY(boost);
+		int []bad=badThing(MazeMain);
+		int BadX=getX(bad);
+		int BadY=getY(bad);
 		boolean boostAvailable=true;
+		boolean badAvailable=true;
 		for (int count=0;count<1202;count++) {
 			StdDraw.enableDoubleBuffering();
 			int [][]MazeMain2=MovingMario(MazeMain);
@@ -38,6 +43,13 @@ public class MazeGame {
 			}
 			if (boostAvailable) {
 				StdDraw.picture(BoostX/20.0+0.025, BoostY/20.0+0.025,"Potion.png",0.025,0.025);
+			}
+			if (PlayerX==BadX&&PlayerY==BadY&&badAvailable) {
+				count=count+250;
+				badAvailable=false;
+			}
+			if (boostAvailable) {
+				StdDraw.picture(BadX/20.0+0.025, BadY/20.0+0.025,"Bad.png",0.025,0.025);
 			}
 			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
 			StdDraw.show();
@@ -878,4 +890,19 @@ public class MazeGame {
 		}
 		return isPath;
 	}
+    public static int[] badThing (int [][]Board) {
+    	boolean NoBad=true;
+    	int x=0;
+    	int y=0;
+    	while (NoBad) {
+			x=(int)(Math.random()*19)+1;
+			y=(int)(Math.random()*19)+1;
+			boolean isPath=checkPath(Board,x,y);
+			if (isPath)
+				NoBad=false;
+		}
+		int[]BadSpot= {x,y};
+		return BadSpot;
+    	
+    }
 }
