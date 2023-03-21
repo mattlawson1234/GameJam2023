@@ -155,6 +155,15 @@ public class MazeGame {
 
             }
 
+            // Check if invalid walk coordinates were found
+            if(walkCoordinates[0] == 0 && walkCoordinates[1] ==0){
+
+                // Fill all remaining spaces with walls
+                maze = fillSpaces(maze);
+                break;
+
+            }
+
             // Loop for the current randomized walk, will continue until 14 tiles have been placed
             while(pathPlaced < 14){
 
@@ -228,47 +237,6 @@ public class MazeGame {
 
         // Generate the exit tile
         //maze = generateExit(maze);
-
-        // Return the value of maze
-        return maze;
-
-    }
-
-    // Method to generate the exit tile (must be at least 5 spaces away)
-    public static int[][] generateExit(int[][] maze){
-
-        // Declare an array to store the coordinates of the exit tile
-        int[] exitTile = new int[2];
-
-        // Declare a boolean variable to store if a valid 
-        boolean validExit = true;
-
-        // Loop to find a valid exit tile
-        while(validExit){
-
-            // Generate a random path tile
-            exitTile = findPathTile(maze);
-
-            // Check if there is a start tile within 5 spaces of the exit tile
-            for(int i = -2; i < 3; i++){
-
-                for(int j = -2; j < 3; j++){
-
-                    if(exitTile[0] + i < 18 && exitTile[0] + i > 1 && exitTile[1] + j < 18 &&
-                    exitTile[1] + j > 1 && maze[exitTile[0] + i][exitTile[1] + j] == 3){
-
-                        validExit = false;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        // Assign exit tile to maze
-        maze[exitTile[0]][exitTile[1]] = 3;
 
         // Return the value of maze
         return maze;
@@ -373,13 +341,14 @@ public class MazeGame {
         // Declare boolean variable to store whether loop has found a valid starting tile
         boolean validTile = false;
 
+        // Declare counter to check if loop is unable to find a valid walk tile
+        int counter = 0;
+
         // Loop to find a starting tile for the walk
         while(!validTile){
 
             // Randomly select a path tile in the maze
             walkCoordinates = findPathTile(maze);
-
-            System.out.println(walkCoordinates[0] + " " + walkCoordinates[1]);
 
             // Check if starting the walk at the selected tile would cause a path cube
             if(findPathCube(maze, walkCoordinates)){
@@ -398,12 +367,45 @@ public class MazeGame {
 
             }
 
-            System.out.println(validTile);
+            // Increment the counter if search is unsuccessful
+            counter++;
+
+            // Check if the counter is high
+            if(counter > 500){
+
+                walkCoordinates[0] = 0;
+                walkCoordinates[1] = 0;
+                break;
+
+            }
 
         }
 
         // Return the value of walkCoordinates
         return walkCoordinates;
+
+    }
+
+    // Method to fill all remaining maze spaces with walls
+    public static int[][] fillSpaces(int[][] maze){
+
+        // Replace all space tiles with walls
+        for(int i = 0; i < 20; i++){
+
+            for(int j = 0; j < 20; j++){
+
+                if(maze[i][j] == 99){
+
+                    maze[i][j] = 1;
+
+                }
+
+            }
+
+        }
+
+        // Return the value of maze
+        return maze;
 
     }
 
@@ -605,6 +607,47 @@ public class MazeGame {
         
         // Return the value of adjacentTile
         return adjacentTile;
+
+    }
+
+    // Method to generate the exit tile (must be at least 5 spaces away)
+    public static int[][] generateExit(int[][] maze){
+
+        // Declare an array to store the coordinates of the exit tile
+        int[] exitTile = new int[2];
+
+        // Declare a boolean variable to store if a valid 
+        boolean validExit = true;
+
+        // Loop to find a valid exit tile
+        while(validExit){
+
+            // Generate a random path tile
+            exitTile = findPathTile(maze);
+
+            // Check if there is a start tile within 5 spaces of the exit tile
+            for(int i = -2; i < 3; i++){
+
+                for(int j = -2; j < 3; j++){
+
+                    if(exitTile[0] + i < 18 && exitTile[0] + i > 1 && exitTile[1] + j < 18 &&
+                    exitTile[1] + j > 1 && maze[exitTile[0] + i][exitTile[1] + j] == 3){
+
+                        validExit = false;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        // Assign exit tile to maze
+        maze[exitTile[0]][exitTile[1]] = 3;
+
+        // Return the value of maze
+        return maze;
 
     }
 
