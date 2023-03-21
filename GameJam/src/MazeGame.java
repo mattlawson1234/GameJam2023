@@ -116,7 +116,7 @@ public class MazeGame {
         int startIndexA = findStartCoord(), startIndexB = findStartCoord();
 
         // Place the start tile at those coordinates
-        maze[startIndexA][startIndexB] = 3;
+        maze[startIndexA][startIndexB] = 2;
 
         // Declare variables required for randomized walk loop
         int remaining = 323;        // Counter for the number of empty tiles (323 since the edge of the array takes up 76, and the starting tile takes up 1)
