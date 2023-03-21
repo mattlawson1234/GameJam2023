@@ -20,7 +20,7 @@ public class MazeGame {
 		int[]exit=findExit(MazeMain);
 		int ExitX=getX(exit);
 		int ExitY=getY(exit);
-		int []boost=boosts();
+		int []boost=boosts(MazeMain);
 		int BoostX=getX(boost);
 		int BoostY=getY(boost);
 		boolean boostAvailable=true;
@@ -856,11 +856,10 @@ public class MazeGame {
 		
 	}
 	
-    public static int[] boosts() {
+    public static int[] boosts(int[][]initialMaze) {
 		boolean NoBoost=true;
 		int x=0;
 		int y=0;
-		int [][]initialMaze=generateMaze();
 		while (NoBoost) {
 			x=(int)(Math.random()*19)+1;
 			y=(int)(Math.random()*19)+1;
