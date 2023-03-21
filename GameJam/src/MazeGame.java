@@ -151,6 +151,7 @@ public class MazeGame {
                 // Store the starting player position as the start of the next walk
                 walkCoordinates[0] = startIndexA;
                 walkCoordinates[1] = startIndexB;
+                firstWalk = false;
 
             }
 
@@ -232,16 +233,10 @@ public class MazeGame {
 
             }
 
-            // Change the final walk tile to the exit tile if it is the first walk
-            if(firstWalk){
-
-                // Generate the exit tile
-                maze = generateExit(maze, walkCoordinates);
-                firstWalk = false;
-
-            }
-
         }
+
+        // Generate the exit tile
+        maze = generateExit(maze);
 
         // Return the value of maze
         return maze;
@@ -615,11 +610,41 @@ public class MazeGame {
 
     }
 
-    // Method to generate the exit tile at the end of the first walk
-    public static int[][] generateExit(int[][] maze, int[] walkCoordinates){
+    // Method to generate the exit tile (must be at least 5 spaces away)
+    public static int[][] generateExit(int[][] maze){
+
+        // Declare an array to store the coordinates of the exit tile
+        int[] exitTile = new int[2];
+
+        // Declare a boolean variable to store if a valid 
+        boolean validExit = true;
+
+        // Loop to find a valid exit tile
+        while(validExit){
+
+            // Generate a random path tile
+            exitTile = findPathTile(maze);
+
+            // Check if there is a start tile within 5 spaces of the exit tile
+            for(int i = -2; i < 3; i++){
+
+                for(int j = -2; j < 3; j++){
+
+                    if(exitTile[0] + i < 18 && exitTile[0] + i > 1 && exitTile[1] + j < 18 &&
+                    exitTile[1] + j > 1 && maze[exitTile[0] + i][exitTile[1] + j] == 3){
+
+                        validExit = false;
+
+                    }
+
+                }
+
+            }
+
+        }
 
         // Assign exit tile to maze
-        maze[walkCoordinates[0]][walkCoordinates[1]] = 4;
+        maze[exitTile[0]][exitTile[1]] = 4;
 
         // Return the value of maze
         return maze;
