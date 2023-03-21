@@ -227,7 +227,7 @@ public class MazeGame {
         }
 
         // Generate the exit tile
-        maze = generateExit(maze);
+        //maze = generateExit(maze);
 
         // Return the value of maze
         return maze;
@@ -266,6 +266,9 @@ public class MazeGame {
             }
 
         }
+
+        // Assign exit tile to maze
+        maze[exitTile[0]][exitTile[1]] = 4;
 
         // Return the value of maze
         return maze;
