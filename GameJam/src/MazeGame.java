@@ -236,7 +236,7 @@ public class MazeGame {
         }
 
         // Generate the exit tile
-        //maze = generateExit(maze);
+        maze = generateExit(maze);
 
         // Return the value of maze
         return maze;
@@ -832,7 +832,8 @@ public class MazeGame {
 			
 		return Board;
 	}
-	//Finds the exit tile of the random maze and stores in a 1D array as [x,y]
+	
+    //Finds the exit tile of the random maze and stores in a 1D array as [x,y]
 	public static int[] findExit(int[][]Board) {
 		int x=0;
 		int y=0;
@@ -847,7 +848,8 @@ public class MazeGame {
 		int []position= {x,y};
 		return position;
 	}
-	//Finds the charcter within the 2D array, returns a 1D array with the x and y position of the chracter
+	
+    //Finds the charcter within the 2D array, returns a 1D array with the x and y position of the chracter
 	public static int[] findCharacter(int[][]Board) {
 		int x=0;
 		int y=0;
@@ -862,12 +864,14 @@ public class MazeGame {
 		int[]position = {x,y};
 		return position;
 	}
-	//Returns the x value of the charcter from the 1D array of it's location
+	
+    //Returns the x value of the charcter from the 1D array of it's location
 	public static int getX (int[]position) {
 		int x=position[0];
 		return x;
 	}
-	//Returns the y value of the charcter from the 1D array of it's location
+	
+    //Returns the y value of the charcter from the 1D array of it's location
 	public static int getY (int[]position) {
 		int y=position[1];
 		return y;
@@ -876,7 +880,8 @@ public class MazeGame {
 	public static void startScreen() {
 		
 	}
-	public static int[] boosts() {
+	
+    public static int[] boosts() {
 		boolean NoBoost=true;
 		int x=0;
 		int y=0;
@@ -891,7 +896,8 @@ public class MazeGame {
 		int[]boostSpot= {x,y};
 		return boostSpot;
 	}
-	public static boolean checkPath(int [][]Board, int x, int y) {
+	
+    public static boolean checkPath(int [][]Board, int x, int y) {
 		boolean isPath=false;
 		if (Board[x][y]==0) {
 			isPath=true;
