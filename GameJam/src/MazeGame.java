@@ -54,7 +54,7 @@ public class MazeGame {
 				count=count+250;
 				badAvailable=false;
 			}
-			if (boostAvailable) {
+			if (badAvailable) {
 				StdDraw.picture(BadX/20.0+0.025, BadY/20.0+0.025,"Bad.png",0.025,0.025);
 			}
 			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
