@@ -16,7 +16,7 @@ public class MazeGame {
 	//This prints one level of the maze
 	public static boolean oneLevel() {	
 		boolean alive=false;
-		int [][]MazeMain=Matrix();
+		int [][]MazeMain=generateMaze();
 		int[]exit=findExit(MazeMain);
 		int ExitX=getX(exit);
 		int ExitY=getY(exit);
@@ -793,7 +793,7 @@ public class MazeGame {
 		boolean NoBoost=true;
 		int x=0;
 		int y=0;
-		int [][]initialMaze=Matrix();
+		int [][]initialMaze=generateMaze();
 		while (NoBoost) {
 			x=(int)(Math.random()*19)+1;
 			y=(int)(Math.random()*19)+1;
