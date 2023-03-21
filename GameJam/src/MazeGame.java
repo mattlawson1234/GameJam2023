@@ -8,11 +8,17 @@ public class MazeGame {
 	public static void main (String[]arg) {
 		boolean alive=true;
 		int levelsCompleted=0;
-		while (alive) {
-			alive=oneLevel(levelsCompleted);
-			levelsCompleted++;
-		}	
-		
+		boolean onStartScreen=true;
+		startScreen();
+		while(onStartScreen) {
+			if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
+				StdDraw.clear();
+				while (alive) {
+					alive=oneLevel(levelsCompleted);
+					levelsCompleted++;
+				}
+			}
+		}
 	}
 	//This prints one level of the maze
 	public static boolean oneLevel(int levelsDone) {	
@@ -920,7 +926,17 @@ public class MazeGame {
 	}
 	
 	public static void startScreen() {
-		
+		StdDraw.picture(0.5, 0.5, "Start.png",1,1);
+		Font font = new Font("Arial", Font.BOLD, 40);
+		StdDraw.setFont(font);
+		StdDraw.text(0.5, 0.9, "Running out of Room(ba)");
+		Font font1 = new Font("Arial", Font.BOLD, 20);
+		StdDraw.setFont(font1);
+		StdDraw.text(0.5, 0.8, "Use the arrow keys to move");
+		StdDraw.text(0.5, 0.75, "Escape before you run out of room in the light");
+		StdDraw.text(0.5, 0.7, "Batteries give extra light");
+		StdDraw.text(0.5, 0.65, "Dust piles take light away");
+		StdDraw.text(0.5, 0.6, "Press any arrow key to begin");
 	}
 	
     public static int[] boosts(int[][]initialMaze) {
