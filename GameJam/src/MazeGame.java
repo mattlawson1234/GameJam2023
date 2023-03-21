@@ -644,7 +644,7 @@ public class MazeGame {
         }
 
         // Assign exit tile to maze
-        maze[exitTile[0]][exitTile[1]] = 3;
+        maze[exitTile[0]][exitTile[1]] = 4;
 
         // Return the value of maze
         return maze;
