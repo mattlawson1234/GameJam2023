@@ -27,8 +27,8 @@ public class MazeGame {
 		int[]exit=findExit(MazeMain);
 		int ExitX=getX(exit);
 		int ExitY=getY(exit);
-		int []BoostXA= new int [5-levelsDone];
-		int []BoostYA= new int [5-levelsDone];
+		int []BoostXA= new int [5];
+		int []BoostYA= new int [5];
 		for (int i=0; i<(5-levelsDone);i++) {
 			int []boost=boosts(MazeMain);
 			int BoostX=getX(boost);
@@ -36,11 +36,17 @@ public class MazeGame {
 			BoostXA[i]=BoostX;
 			BoostYA[i]=BoostY;
 		}
-		int []bad=badThing(MazeMain);
-		int BadX=getX(bad);
-		int BadY=getY(bad);
-		boolean []boostAvailable= new boolean [5-levelsDone];
-		boolean badAvailable=true;
+		int []badXA= new int [levelsDone];
+		int []badYA= new int [levelsDone];
+		for (int i=0; i<levelsDone; i++){
+			int []bad=badThing(MazeMain);
+			int BadX=getX(bad);
+			int BadY=getY(bad);
+			badXA[i]=BadX;
+			badYA[i]=BadY;
+		}
+		boolean []boostAvailable= new boolean [5];
+		boolean []badAvailable=new boolean [levelsDone];
 		for (int count=0;count<1202;count++) {
 			StdDraw.enableDoubleBuffering();
 			int [][]MazeMain2=MovingMario(MazeMain);
@@ -58,12 +64,14 @@ public class MazeGame {
 					StdDraw.picture(BoostXA[i]/20.0+0.025, BoostYA[i]/20.0+0.025,"Potion.png",0.025,0.025);
 				}
 			}
-			if (PlayerX==BadX&&PlayerY==BadY&&badAvailable) {
-				count=count+250;
-				badAvailable=false;
-			}
-			if (badAvailable) {
-				StdDraw.picture(BadX/20.0+0.025, BadY/20.0+0.025,"Bad.png",0.025,0.025);
+			for (int i=0; i<levelsDone; i++) {
+				if (PlayerX==badXA[i]&&PlayerY==badYA[i]&&!badAvailable[i]) {
+					count=count+250;
+					badAvailable[i]=false;
+				}
+				if (badAvailable[i]) {
+					StdDraw.picture(badXA[i]/20.0+0.025, badYA[i]/20.0+0.025,"Bad.png",0.025,0.025);
+				}
 			}
 			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
 			StdDraw.show();
