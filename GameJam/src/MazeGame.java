@@ -69,7 +69,7 @@ public class MazeGame {
 					count=count+250;
 					badAvailable[i]=false;
 				}
-				if (badAvailable[i]) {
+				if (!badAvailable[i]) {
 					StdDraw.picture(badXA[i]/20.0+0.025, badYA[i]/20.0+0.025,"Bad.png",0.025,0.025);
 				}
 			}
