@@ -29,21 +29,33 @@ public class MazeGame {
 		int ExitY=getY(exit);
 		int []BoostXA= new int [5];
 		int []BoostYA= new int [5];
+		int []allItemsX = new int [5+levelsDone];
+		int []allItemsY = new int [5+levelsDone];
 		for (int i=0; i<(5-levelsDone);i++) {
-			int []boost=boosts(MazeMain);
+			int []boost=item(MazeMain,allItemsX,allItemsY);
 			int BoostX=getX(boost);
 			int BoostY=getY(boost);
 			BoostXA[i]=BoostX;
 			BoostYA[i]=BoostY;
+			allItemsX[i]=BoostX;
+			allItemsY[i]=BoostY;
 		}
 		int []badXA= new int [levelsDone];
 		int []badYA= new int [levelsDone];
 		for (int i=0; i<levelsDone; i++){
-			int []bad=badThing(MazeMain);
+			int []bad=item(MazeMain,allItemsX,allItemsY);
 			int BadX=getX(bad);
 			int BadY=getY(bad);
 			badXA[i]=BadX;
 			badYA[i]=BadY;
+			if (5-levelsDone>0) {
+				allItemsX[5-levelsDone+i]=BadX;
+				allItemsY[5-levelsDone+i]=BadY;
+			}
+			else {
+				allItemsX[i]=BadX;
+				allItemsY[i]=BadY;
+			}
 		}
 		boolean []boostAvailable= new boolean [5];
 		boolean []badAvailable=new boolean [levelsDone];
@@ -67,7 +79,7 @@ public class MazeGame {
 			for (int i=0; i<levelsDone; i++) {
 				if (PlayerX==badXA[i]&&PlayerY==badYA[i]&&!badAvailable[i]) {
 					count=count+250;
-					badAvailable[i]=false;
+					badAvailable[i]=true;
 				}
 				if (!badAvailable[i]) {
 					StdDraw.picture(badXA[i]/20.0+0.025, badYA[i]/20.0+0.025,"Bad.png",0.025,0.025);
@@ -267,10 +279,25 @@ public class MazeGame {
 
             }
 
+			// Print the maze
+			for(int i = 0; i < 20; i++){
+
+				for(int j = 0; j < 20; j++){
+	
+					System.out.print(maze[i][j] + "\t");
+	
+				}
+	
+				System.out.println();
+	
+			}
+
+			System.out.println();
+
         }
 
         // Generate the exit tile
-        maze = generateExit(maze, startIndexA, startIndexB);
+        maze = generateExit(maze);
 
         // Return the value of maze
         return maze;
@@ -702,36 +729,13 @@ public class MazeGame {
     }
 
     // Method to generate the exit tile (must be at least 5 spaces away)
-    public static int[][] generateExit(int[][] maze, int startIndexA, int startIndexB){
+    public static int[][] generateExit(int[][] maze){
 
         // Declare an array to store the coordinates of the exit tile
         int[] exitTile = new int[2];
 
-        // Declare boolean variable to store whether a valid exit tile has been found
-        boolean validExit = true;
-
-        do{
-
-            // Generate a random path tile
-		    exitTile = findPathTile(maze);
-
-            // Assign the lateral and vertical distance from the start to variables
-            int rowDistance = Math.abs(exitTile[0] - startIndexA);
-            int colDistance = Math.abs(exitTile[1] - startIndexB);
-
-            // Check the distance
-            if(rowDistance < 8 || colDistance < 8){
-
-                validExit = false;
-
-            }
-            else{
-
-                validExit = true;
-
-            }
-
-        }while(!validExit);
+		// Generate a random path tile
+		exitTile = findPathTile(maze);
 
         // Assign exit tile to maze
         maze[exitTile[0]][exitTile[1]] = 4;
@@ -963,7 +967,7 @@ public class MazeGame {
 		StdDraw.text(0.5, 0.6, "Press any arrow key to begin");
 	}
 	
-    public static int[] boosts(int[][]initialMaze) {
+    public static int[] item(int[][]initialMaze, int []itemX, int []itemY) {
 		boolean NoBoost=true;
 		int x=0;
 		int y=0;
@@ -972,7 +976,11 @@ public class MazeGame {
 			y=(int)(Math.random()*19)+1;
 			boolean isPath=checkPath(initialMaze,x,y);
 			if (isPath)
-				NoBoost=false;
+				for(int i=0; i<itemX.length;i++) {
+					if (itemX[i]!=x||itemY[i]!=y) {
+						NoBoost=false;
+					}
+				}
 		}
 		int[]boostSpot= {x,y};
 		return boostSpot;
@@ -985,19 +993,6 @@ public class MazeGame {
 		}
 		return isPath;
 	}
-    public static int[] badThing (int [][]Board) {
-    	boolean NoBad=true;
-    	int x=0;
-    	int y=0;
-    	while (NoBad) {
-			x=(int)(Math.random()*19)+1;
-			y=(int)(Math.random()*19)+1;
-			boolean isPath=checkPath(Board,x,y);
-			if (isPath)
-				NoBad=false;
-		}
-		int[]BadSpot= {x,y};
-		return BadSpot;
-    	
-    }
+
+ 
 }
