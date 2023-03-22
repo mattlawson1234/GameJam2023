@@ -27,13 +27,19 @@ public class MazeGame {
 		int[]exit=findExit(MazeMain);
 		int ExitX=getX(exit);
 		int ExitY=getY(exit);
-		int []boost=boosts(MazeMain);
-		int BoostX=getX(boost);
-		int BoostY=getY(boost);
+		int []BoostXA= new int [5-levelsDone];
+		int []BoostYA= new int [5-levelsDone];
+		for (int i=0; i<(5-levelsDone);i++) {
+			int []boost=boosts(MazeMain);
+			int BoostX=getX(boost);
+			int BoostY=getY(boost);
+			BoostXA[i]=BoostX;
+			BoostYA[i]=BoostY;
+		}
 		int []bad=badThing(MazeMain);
 		int BadX=getX(bad);
 		int BadY=getY(bad);
-		boolean boostAvailable=true;
+		boolean []boostAvailable= new boolean [5-levelsDone];
 		boolean badAvailable=true;
 		for (int count=0;count<1202;count++) {
 			StdDraw.enableDoubleBuffering();
@@ -43,12 +49,14 @@ public class MazeGame {
 			int []Character=findCharacter(MazeMain2);
 			int PlayerX=getX(Character);
 			int PlayerY=getY(Character);
-			if (PlayerX==BoostX&&PlayerY==BoostY&&boostAvailable) {
-				count=count-250;
-				boostAvailable=false;
-			}
-			if (boostAvailable) {
-				StdDraw.picture(BoostX/20.0+0.025, BoostY/20.0+0.025,"Potion.png",0.025,0.025);
+			for (int i=0; i<(5-levelsDone);i++){
+				if (PlayerX==BoostXA[i]&&PlayerY==BoostYA[i]&&!boostAvailable[i]) {
+					count=count-250;
+					boostAvailable[i]=true;
+				}
+				if (!boostAvailable[i]) {
+					StdDraw.picture(BoostXA[i]/20.0+0.025, BoostYA[i]/20.0+0.025,"Potion.png",0.025,0.025);
+				}
 			}
 			if (PlayerX==BadX&&PlayerY==BadY&&badAvailable) {
 				count=count+250;
