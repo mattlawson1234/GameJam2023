@@ -92,12 +92,17 @@ public class MazeGame {
 
 			if (PlayerX==ExitX&&PlayerY==ExitY) {
 				count=1210;
-				printBoard(MazeMain2);
-				Font font = new Font("Arial", Font.BOLD, 40);
-				StdDraw.setFont(font);
-				StdDraw.text(0.5, 0.5, "You Beat This Level");
-				StdDraw.show();
-				StdDraw.pause(5000);
+				boolean onBreakScreen=true;
+				betweenLevels(levelsDone);
+				while(onBreakScreen) {			
+					StdDraw.show();
+					StdDraw.pause(100);
+					if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
+						StdDraw.clear();
+						onBreakScreen=false;
+					}
+				}
+				StdDraw.clear();
 				alive=true;
 			}
 		}
@@ -993,6 +998,27 @@ public class MazeGame {
 		}
 		return isPath;
 	}
-
+    public static void betweenLevels (int levelsDone) {
+		String levels = String.valueOf(levelsDone+1);
+		String dust = "The next level has " + levels + " dust piles";
+		String complete = "You completed level " + levels;
+    	StdDraw.picture(0.5, 0.5, "Start.png",1,1);
+		Font font = new Font("Arial", Font.BOLD, 40);
+		StdDraw.setFont(font);
+		StdDraw.text(0.5, 0.9, complete);
+		Font font1 = new Font("Arial", Font.BOLD, 20);
+		StdDraw.setFont(font1);
+		if (5-levelsDone>0) {
+			String levelsMinusFive= String.valueOf(4-levelsDone);
+			String light = "The next level has " + levelsMinusFive + " batteries";
+			StdDraw.text(0.5, 0.8, light);
+		}
+		else {
+			StdDraw.text(0.5, 0.8, "The next level has 0 batteries");
+		}
+		StdDraw.text(0.5, 0.75, dust);
+		StdDraw.text(0.5, 0.7, "The next level has _ keys");
+		StdDraw.text(0.5, 0.65, "Press the arrow key to start the next level");
+    }
  
 }
