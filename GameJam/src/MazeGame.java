@@ -185,11 +185,15 @@ public class MazeGame {
         // Loop for the randomized walks, will continue until all tiles are filled
         while(remaining > 0){
 
+            // Check if there are any remaining space tiles
             if(!searchSpaces(maze)){
 
                 break;
 
             }
+
+            // Check for any path cubes
+            fillPathCubes(maze);
 
             // Declare counter for amount of path tiles placed during current walk
             int pathPlaced = 0;
@@ -212,6 +216,12 @@ public class MazeGame {
                 walkCoordinates[1] = startIndexB;
                 firstWalk = false;
 
+                // Place walls at the corners of the start tile
+                maze[startIndexA + 1][startIndexB - 1] = 1;
+                maze[startIndexA + 1][startIndexB + 1] = 1;
+                maze[startIndexA - 1][startIndexB - 1] = 1;
+                maze[startIndexA - 1][startIndexB + 1] = 1;
+
             }
 
             // Check if invalid walk coordinates were found
@@ -225,6 +235,9 @@ public class MazeGame {
 
             // Loop for the current randomized walk, will continue until 14 tiles have been placed
             while(pathPlaced < 14){
+
+                // Check for any path cubes
+                fillPathCubes(maze);
 
                 // Declare array to store coordinates for checking surroundings
                 int[] currentTile = new int[2];
@@ -391,6 +404,29 @@ public class MazeGame {
 
     }
 
+    // Method to fill path cubes
+    public static void fillPathCubes(int[][] maze){
+
+        // Find any path cubes in the maze and fill them
+        for(int i = 1; i < 19; i++){
+
+            for(int j = 1; j < 19; j++){
+
+                // Store current tile in array
+                int[] currentTile = {i, j};
+
+                if(maze[i][j] == 99 && findPathCube(maze, currentTile)){
+
+                    maze[i][j] = 1;
+
+                }
+
+            }
+
+        }
+
+    }
+
     // Method to determine the starting position of the next walk
     public static int[] findWalkCoord(int[][] maze){
 
@@ -408,73 +444,6 @@ public class MazeGame {
 
             // Randomly select a path tile in the maze
             walkCoordinates = findPathTile(maze);
-
-			// Declare array to store tile next to start coordinates
-			int[] adjacentTile = new int[2];
-
-			// Assign tile above
-			adjacentTile[0] = walkCoordinates[0] - 1;
-			adjacentTile[1] = walkCoordinates[1];
-
-			// Check tile above
-			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
-
-				// Check for path cube
-				if(findPathCube(maze, adjacentTile)){
-
-					maze[adjacentTile[0]][adjacentTile[1]] = 1;
-
-				}
-
-			}
-
-			// Assign tile below
-			adjacentTile[0] = walkCoordinates[0] + 1;
-			adjacentTile[1] = walkCoordinates[1];
-
-			// Check tile below
-			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
-
-				// Check for path cube
-				if(findPathCube(maze, adjacentTile)){
-
-					maze[adjacentTile[0]][adjacentTile[1]] = 1;
-
-				}
-
-			}
-
-			// Assign tile to the left
-			adjacentTile[0] = walkCoordinates[0];
-			adjacentTile[1] = walkCoordinates[1] - 1;
-
-			// Check tile to the left
-			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
-
-				// Check for path cube
-				if(findPathCube(maze, adjacentTile)){
-
-					maze[adjacentTile[0]][adjacentTile[1]] = 1;
-
-				}
-
-			}
-
-			// Assign tile to the right
-			adjacentTile[0] = walkCoordinates[0];
-			adjacentTile[1] = walkCoordinates[1] + 1;
-
-			// Check tile to the right
-			if(maze[adjacentTile[0]][adjacentTile[1]] == 99){
-
-				// Check for path cube
-				if(findPathCube(maze, adjacentTile)){
-
-					maze[adjacentTile[0]][adjacentTile[1]] = 1;
-
-				}
-
-			}
 
 			// Check if spaces still exist around the selected tile
 			if(findSpaces(maze, walkCoordinates)){
