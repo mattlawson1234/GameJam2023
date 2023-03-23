@@ -16,12 +16,16 @@ public class MazeGame {
 					while (alive) {
 						alive=oneLevel(levelsCompleted);
 						levelsCompleted++;
+						System.out.println(alive);
 						
 					}
 				}
 			}
-			endOfLevel(10);
-		
+		StdDraw.clear();
+		endOfLevel(5);
+		StdDraw.show();
+		StdDraw.pause(10000000);
+			
 	}
 	//This prints one level of the maze
 	public static boolean oneLevel(int levelsDone) {	
@@ -111,7 +115,7 @@ public class MazeGame {
 			}
 			
 		}
-		
+		StdDraw.clear();
 		return alive;
 	}
 	//Prints the board for the player
@@ -1002,6 +1006,7 @@ public class MazeGame {
 		StdDraw.text(0.5, 0.65, "Press the arrow key to start the next level");
     }
     public static void endOfLevel (int levelsDone) {
+    	StdDraw.clear();
     	StdDraw.picture(0.5, 0.5, "Start.png",1,1);
 		String levels = String.valueOf(levelsDone+1);
 		String complete = "You completed " + levels + " levels";
@@ -1012,6 +1017,7 @@ public class MazeGame {
 		StdDraw.setFont(font1);
 		StdDraw.text(0.5, 0.8, "To return to main menu press any arrow key");
 		StdDraw.text(0.5, 0.75, "To exit the game press 'e'");
+		System.out.println("The end");
     }
  
 }
