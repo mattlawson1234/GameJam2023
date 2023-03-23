@@ -81,7 +81,7 @@ public class MazeGame {
 					boostAvailable[i]=true;
 				}
 				if (!boostAvailable[i]) {
-					StdDraw.picture(BoostXA[i]/20.0+0.025, BoostYA[i]/20.0+0.025,"Potion.png",0.025,0.025);
+					StdDraw.picture(BoostXA[i]/20.0+0.025, BoostYA[i]/20.0+0.025,"battery.png",0.025,0.025);
 				}
 			}
 			for (int i=0; i<levelsDone; i++) {
@@ -90,7 +90,7 @@ public class MazeGame {
 					badAvailable[i]=true;
 				}
 				if (!badAvailable[i]) {
-					StdDraw.picture(badXA[i]/20.0+0.025, badYA[i]/20.0+0.025,"Bad.png",0.025,0.025);
+					StdDraw.picture(badXA[i]/20.0+0.025, badYA[i]/20.0+0.025,"dust.png",0.025,0.025);
 				}
 			}
 			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
@@ -123,10 +123,10 @@ public class MazeGame {
 		for (int count=0; count<20; count++) {
 			for (int count2=0; count2<20; count2++) {
 				if (Board[count][count2]==1) {
-					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Brick.png",0.05,0.05);
+					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "WallTexture.png",0.05,0.05);
 				}
 				if (Board[count][count2]==0) {
-					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Path.png",0.05,0.05);
+					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Ground.png",0.05,0.05);
 				}
 				if (Board[count][count2]==2) {
 					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Mario.png",0.05,0.05);
