@@ -302,7 +302,7 @@ public class MazeGame {
         }
 
         // Generate the exit tile
-        maze = generateExit(maze);
+        maze = generateExit(maze, startIndexA, startIndexB);
 
         // Return the value of maze
         return maze;
