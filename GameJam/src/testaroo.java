@@ -69,6 +69,13 @@ public class testaroo {
                 walkCoordinates[1] = startIndexB;
                 firstWalk = false;
 
+                // Print walls at the corners around the player start position
+                maze[startIndexA + 1][startIndexB + 1] = 1;
+                maze[startIndexA - 1][startIndexB + 1] = 1;
+                maze[startIndexA + 1][startIndexB - 1] = 1;
+                maze[startIndexA - 1][startIndexB - 1] = 1;
+                remaining -= 4;
+
             }
 
             // Check if invalid walk coordinates were found
@@ -422,8 +429,10 @@ public class testaroo {
         boolean tileSurrounded = false;
 
         // Check around the selected tile to see if it is surrounded
-        if(maze[currentTile[0] + 1][currentTile[1]] == 1 && maze[currentTile[0] - 1][currentTile[1]] == 1 &&
-        maze[currentTile[0]][currentTile[1] + 1] == 1 && maze[currentTile[0]][currentTile[1] - 1] == 1){
+        if((maze[currentTile[0] + 1][currentTile[1]] == 1 && maze[currentTile[0] - 1][currentTile[1]] == 1 &&
+        maze[currentTile[0]][currentTile[1] + 1] == 1 && maze[currentTile[0]][currentTile[1] - 1] == 1) ||
+        (maze[currentTile[0] + 1][currentTile[1]] == 0 && maze[currentTile[0] - 1][currentTile[1]] == 0 &&
+        maze[currentTile[0]][currentTile[1] + 1] == 0 && maze[currentTile[0]][currentTile[1] - 1] == 0)){
 
             tileSurrounded = true;
 
@@ -736,6 +745,7 @@ public class testaroo {
         }
 
     }
+
 
     //Prints the board for the player
 	public static void printBoard (int [][]Board) {//Prints the current board
