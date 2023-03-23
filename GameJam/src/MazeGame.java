@@ -8,23 +8,44 @@ public class MazeGame {
 	public static void main (String[]arg) {
 		boolean alive=true;
 		int levelsCompleted=0;
+		boolean playAgain=true;
+		while(playAgain) {
+			
 			startScreen();
-			StdDraw.pause(100);
+			StdDraw.show();
+			StdDraw.pause(1000);
 			while(alive) {
 				if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
 					StdDraw.clear();
 					while (alive) {
 						alive=oneLevel(levelsCompleted);
 						levelsCompleted++;
-						System.out.println(alive);
+						
 						
 					}
 				}
 			}
-		StdDraw.clear();
-		endOfLevel(5);
+			StdDraw.clear();
+			endOfLevel(levelsCompleted);
+			StdDraw.show();
+			StdDraw.pause(100);
+			boolean onEndGame=true;
+			while(onEndGame) {
+				if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
+					StdDraw.clear();
+					StdDraw.pause(25);
+					onEndGame=false;
+					alive=true;
+				}
+				if(StdDraw.isKeyPressed(69)) {
+					onEndGame=false;
+					playAgain=false;
+					StdDraw.clear();
+				}
+			}
+		}
+		StdDraw.filledSquare(0.5,0.5,1);
 		StdDraw.show();
-		StdDraw.pause(10000000);
 			
 	}
 	//This prints one level of the maze
@@ -107,6 +128,7 @@ public class MazeGame {
 					StdDraw.pause(100);
 					if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
 						StdDraw.clear();
+						StdDraw.pause(25);
 						onBreakScreen=false;
 					}
 				}
@@ -1002,8 +1024,7 @@ public class MazeGame {
 			StdDraw.text(0.5, 0.8, "The next level has 0 batteries");
 		}
 		StdDraw.text(0.5, 0.75, dust);
-		StdDraw.text(0.5, 0.7, "The next level has _ keys");
-		StdDraw.text(0.5, 0.65, "Press the arrow key to start the next level");
+		StdDraw.text(0.5, 0.7, "Press the arrow key to start the next level");
     }
     public static void endOfLevel (int levelsDone) {
     	StdDraw.clear();
@@ -1017,7 +1038,6 @@ public class MazeGame {
 		StdDraw.setFont(font1);
 		StdDraw.text(0.5, 0.8, "To return to main menu press any arrow key");
 		StdDraw.text(0.5, 0.75, "To exit the game press 'e'");
-		System.out.println("The end");
     }
  
 }
