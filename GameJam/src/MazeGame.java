@@ -8,32 +8,28 @@ public class MazeGame {
 	public static void main (String[]arg) {
 		boolean alive=true;
 		int levelsCompleted=0;
-		boolean onStartScreen=true;
-		boolean playAgain=true;
-		while(playAgain) {
 			startScreen();
 			StdDraw.pause(100);
-			while(onStartScreen) {
+			while(alive) {
 				if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
 					StdDraw.clear();
 					while (alive) {
-						boolean []levelInfo=oneLevel(levelsCompleted);
+						alive=oneLevel(levelsCompleted);
 						levelsCompleted++;
-						alive=levelInfo[0];
-						playAgain=levelInfo[1];
+						
 					}
 				}
 			}
-		}
+			endOfLevel(10);
+		
 	}
 	//This prints one level of the maze
-	public static boolean[] oneLevel(int levelsDone) {	
+	public static boolean oneLevel(int levelsDone) {	
 		boolean alive=false;
 		int [][]MazeMain=generateMaze();
 		int[]exit=findExit(MazeMain);
 		int ExitX=getX(exit);
 		int ExitY=getY(exit);
-		boolean PlayAgain=false;
 
 		int []BoostXA= new int [5];
 		int []BoostYA= new int [5];
@@ -113,10 +109,11 @@ public class MazeGame {
 				StdDraw.clear();
 				alive=true;
 			}
-
+			StdDraw.clear();
 		}
-		boolean []ReturnInfo= {alive,PlayAgain};
-		return ReturnInfo;
+		StdDraw.clear();
+		
+		return alive;
 	}
 	//Prints the board for the player
 	public static void printBoard (int [][]Board) {//Prints the current board
