@@ -67,7 +67,7 @@ public class MazeGame {
 		}
 		boolean []boostAvailable= new boolean [5];
 		boolean []badAvailable=new boolean [levelsDone];
-		for (int count=0;count<1202;count++) {
+		for (int count=0;count<674;count++) {
 			StdDraw.enableDoubleBuffering();
 			int [][]MazeMain2=MovingMario(MazeMain);
 			printBoard(MazeMain2);
@@ -93,7 +93,7 @@ public class MazeGame {
 					StdDraw.picture(badXA[i]/20.0+0.025, badYA[i]/20.0+0.025,"Bad.png",0.025,0.025);
 				}
 			}
-			int outOfTime=lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
+			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
 			StdDraw.show();
 			StdDraw.pause(50);
 			StdDraw.clear();
@@ -113,26 +113,7 @@ public class MazeGame {
 				StdDraw.clear();
 				alive=true;
 			}
-			boolean onExitScreen=true;
-			if (outOfTime==1) {
-				
-				endOfLevel(levelsDone);
-				while(onExitScreen) {
-					StdDraw.show();
-					StdDraw.pause(100);
-					if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
-						StdDraw.clear();
-						PlayAgain=true;
-						onExitScreen=false;
-						
-					}
-					if(StdDraw.isKeyPressed(69)) {
-						StdDraw.clear();
-						onExitScreen=false;
-					}
-				}
-				StdDraw.clear();
-			}
+
 		}
 		boolean []ReturnInfo= {alive,PlayAgain};
 		return ReturnInfo;
@@ -161,11 +142,11 @@ public class MazeGame {
 
 	}
 
-	public static int lightSource(int [][]Board, double startCount) {
+	public static void lightSource(int [][]Board, double startCount) {
 		int[]position=findCharacter(Board);
 		int x =getX(position);
 		int y = getY(position);
-		int fail=0;
+	
 		
 		StdDraw.setPenRadius(0.055);//Sets radius of drawn circles
 		double radiusDifference = startCount/3000;
@@ -176,10 +157,8 @@ public class MazeGame {
 			radius=radius+0.05;//Adds more to radius
 			//Basically is printing a whole bunch of circles around player
 		}
-		else {
-			fail=1;
-		}
-		return fail;
+
+	
 		
 	}
 
