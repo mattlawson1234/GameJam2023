@@ -8,8 +8,6 @@ public class MazeGame {
 	public static void main (String[]arg) {
 		boolean alive=true;
 		int levelsCompleted=0;
-		boolean onStartScreen=true;
-		boolean playAgain=true;
 			startScreen();
 			StdDraw.pause(100);
 			while(alive) {
@@ -18,7 +16,7 @@ public class MazeGame {
 					while (alive) {
 						alive=oneLevel(levelsCompleted);
 						levelsCompleted++;
-						onStartScreen=false;
+						
 					}
 				}
 			}
