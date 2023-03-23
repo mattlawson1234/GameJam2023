@@ -10,7 +10,7 @@ public class MazeGame {
 		int levelsCompleted=0;
 		boolean playAgain=true;
 		while(playAgain) {
-			
+			levelsCompleted=0;
 			startScreen();
 			StdDraw.show();
 			StdDraw.pause(1000);
@@ -151,7 +151,7 @@ public class MazeGame {
 					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Ground.png",0.05,0.05);
 				}
 				if (Board[count][count2]==2) {
-					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Mario.png",0.05,0.05);
+					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "playercharup.png",0.05,0.05);
 				}
 				if (Board[count][count2]==3) {
 					StdDraw.picture(count/20.0+0.025, count2/20.0+0.025, "Entrance.png",0.05,0.05);
@@ -966,17 +966,8 @@ public class MazeGame {
 	}
 	
 	public static void startScreen() {
-		StdDraw.picture(0.5, 0.5, "Start.png",1,1);
-		Font font = new Font("Arial", Font.BOLD, 40);
-		StdDraw.setFont(font);
-		StdDraw.text(0.5, 0.9, "Running out of Room(ba)");
-		Font font1 = new Font("Arial", Font.BOLD, 20);
-		StdDraw.setFont(font1);
-		StdDraw.text(0.5, 0.8, "Use the arrow keys to move");
-		StdDraw.text(0.5, 0.75, "Escape before you run out of room in the light");
-		StdDraw.text(0.5, 0.7, "Batteries give extra light");
-		StdDraw.text(0.5, 0.65, "Dust piles take light away");
-		StdDraw.text(0.5, 0.6, "Press any arrow key to begin");
+		StdDraw.picture(0.5, 0.5, "Roomba.png",1,1);
+
 	}
 	
     public static int[] item(int[][]initialMaze, int []itemX, int []itemY) {
@@ -1009,7 +1000,7 @@ public class MazeGame {
 		String levels = String.valueOf(levelsDone+1);
 		String dust = "The next level has " + levels + " dust piles";
 		String complete = "You completed level " + levels;
-    	StdDraw.picture(0.5, 0.5, "Start.png",1,1);
+    	StdDraw.picture(0.5, 0.5, "leveladv.png",1,1);
 		Font font = new Font("Arial", Font.BOLD, 40);
 		StdDraw.setFont(font);
 		StdDraw.text(0.5, 0.9, complete);
@@ -1028,7 +1019,7 @@ public class MazeGame {
     }
     public static void endOfLevel (int levelsDone) {
     	StdDraw.clear();
-    	StdDraw.picture(0.5, 0.5, "Start.png",1,1);
+    	StdDraw.picture(0.5, 0.5, "gameoverscr.png",1,1);
 		String levels = String.valueOf(levelsDone+1);
 		String complete = "You completed " + levels + " levels";
 		Font font = new Font("Arial", Font.BOLD, 40);
