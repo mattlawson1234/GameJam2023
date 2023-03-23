@@ -26,7 +26,7 @@ public class MazeGame {
 				}
 			}
 			StdDraw.clear();
-			endOfLevel(levelsCompleted);
+			endOfLevel(levelsCompleted-2);
 			StdDraw.show();
 			StdDraw.pause(100);
 			boolean onEndGame=true;
@@ -1032,6 +1032,7 @@ public class MazeGame {
 		String levels = String.valueOf(levelsDone+1);
 		String complete = "You completed " + levels + " levels";
 		Font font = new Font("Arial", Font.BOLD, 40);
+		
 		StdDraw.setFont(font);
 		StdDraw.text(0.5, 0.9, complete);
 		Font font1 = new Font("Arial", Font.BOLD, 20);
