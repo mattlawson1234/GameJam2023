@@ -313,25 +313,10 @@ public class MazeGame {
 
             }
 
-			// Print the maze
-			for(int i = 0; i < 20; i++){
-
-				for(int j = 0; j < 20; j++){
-	
-					System.out.print(maze[i][j] + "\t");
-	
-				}
-	
-				System.out.println();
-	
-			}
-
-			System.out.println();
-
         }
 
         // Generate the exit tile
-        maze = generateExit(maze);
+        maze = generateExit(maze, startIndexA, startIndexB);
 
         // Return the value of maze
         return maze;
@@ -763,13 +748,36 @@ public class MazeGame {
     }
 
     // Method to generate the exit tile (must be at least 5 spaces away)
-    public static int[][] generateExit(int[][] maze){
+    public static int[][] generateExit(int[][] maze, int startIndexA, int startIndexB){
 
         // Declare an array to store the coordinates of the exit tile
         int[] exitTile = new int[2];
 
-		// Generate a random path tile
-		exitTile = findPathTile(maze);
+        // Declare boolean variable to store whether a valid exit tile has been found
+        boolean validExit = true;
+
+        do{
+
+            // Generate a random path tile
+		    exitTile = findPathTile(maze);
+
+            // Assign the lateral and vertical distance from the start to variables
+            int rowDistance = Math.abs(exitTile[0] - startIndexA);
+            int colDistance = Math.abs(exitTile[1] - startIndexB);
+
+            // Check the distance
+            if(rowDistance < 8 || colDistance < 8){
+
+                validExit = false;
+
+            }
+            else{
+
+                validExit = true;
+
+            }
+
+        }while(!validExit);
 
         // Assign exit tile to maze
         maze[exitTile[0]][exitTile[1]] = 4;
