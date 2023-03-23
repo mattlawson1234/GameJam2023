@@ -9,24 +9,32 @@ public class MazeGame {
 		boolean alive=true;
 		int levelsCompleted=0;
 		boolean onStartScreen=true;
-		startScreen();
-		while(onStartScreen) {
-			if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
-				StdDraw.clear();
-				while (alive) {
-					alive=oneLevel(levelsCompleted);
-					levelsCompleted++;
+		boolean playAgain=true;
+		while(playAgain) {
+			startScreen();
+			StdDraw.pause(100);
+			while(onStartScreen) {
+				if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
+					StdDraw.clear();
+					while (alive) {
+						boolean []levelInfo=oneLevel(levelsCompleted);
+						levelsCompleted++;
+						alive=levelInfo[0];
+						playAgain=levelInfo[1];
+					}
 				}
 			}
 		}
 	}
 	//This prints one level of the maze
-	public static boolean oneLevel(int levelsDone) {	
+	public static boolean[] oneLevel(int levelsDone) {	
 		boolean alive=false;
 		int [][]MazeMain=generateMaze();
 		int[]exit=findExit(MazeMain);
 		int ExitX=getX(exit);
 		int ExitY=getY(exit);
+		boolean PlayAgain=false;
+
 		int []BoostXA= new int [5];
 		int []BoostYA= new int [5];
 		int []allItemsX = new int [5+levelsDone];
@@ -85,7 +93,7 @@ public class MazeGame {
 					StdDraw.picture(badXA[i]/20.0+0.025, badYA[i]/20.0+0.025,"Bad.png",0.025,0.025);
 				}
 			}
-			lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
+			int outOfTime=lightSource(MazeMain2,count);//Count double is to see how many times the loop has run for the shrinking circle
 			StdDraw.show();
 			StdDraw.pause(50);
 			StdDraw.clear();
@@ -105,8 +113,29 @@ public class MazeGame {
 				StdDraw.clear();
 				alive=true;
 			}
+			boolean onExitScreen=true;
+			if (outOfTime==1) {
+				
+				endOfLevel(levelsDone);
+				while(onExitScreen) {
+					StdDraw.show();
+					StdDraw.pause(100);
+					if(StdDraw.isKeyPressed(38)||StdDraw.isKeyPressed(39)||StdDraw.isKeyPressed(40)||StdDraw.isKeyPressed(37)) {
+						StdDraw.clear();
+						PlayAgain=true;
+						onExitScreen=false;
+						
+					}
+					if(StdDraw.isKeyPressed(69)) {
+						StdDraw.clear();
+						onExitScreen=false;
+					}
+				}
+				StdDraw.clear();
+			}
 		}
-		return alive;
+		boolean []ReturnInfo= {alive,PlayAgain};
+		return ReturnInfo;
 	}
 	//Prints the board for the player
 	public static void printBoard (int [][]Board) {//Prints the current board
@@ -132,10 +161,11 @@ public class MazeGame {
 
 	}
 
-	public static void lightSource(int [][]Board, double startCount) {
+	public static int lightSource(int [][]Board, double startCount) {
 		int[]position=findCharacter(Board);
 		int x =getX(position);
 		int y = getY(position);
+		int fail=0;
 		
 		StdDraw.setPenRadius(0.055);//Sets radius of drawn circles
 		double radiusDifference = startCount/3000;
@@ -147,10 +177,9 @@ public class MazeGame {
 			//Basically is printing a whole bunch of circles around player
 		}
 		else {
-			Font font = new Font("Arial", Font.BOLD, 80);
-			StdDraw.setFont(font);
-			StdDraw.text(0.5, 0.5, "You Lose");
+			fail=1;
 		}
+		return fail;
 		
 	}
 
@@ -996,6 +1025,18 @@ public class MazeGame {
 		StdDraw.text(0.5, 0.75, dust);
 		StdDraw.text(0.5, 0.7, "The next level has _ keys");
 		StdDraw.text(0.5, 0.65, "Press the arrow key to start the next level");
+    }
+    public static void endOfLevel (int levelsDone) {
+    	StdDraw.picture(0.5, 0.5, "Start.png",1,1);
+		String levels = String.valueOf(levelsDone+1);
+		String complete = "You completed " + levels + " levels";
+		Font font = new Font("Arial", Font.BOLD, 40);
+		StdDraw.setFont(font);
+		StdDraw.text(0.5, 0.9, complete);
+		Font font1 = new Font("Arial", Font.BOLD, 20);
+		StdDraw.setFont(font1);
+		StdDraw.text(0.5, 0.8, "To return to main menu press any arrow key");
+		StdDraw.text(0.5, 0.75, "To exit the game press 'e'");
     }
  
 }
